@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="Model"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="E:/Google Drive/MES_APS/Model/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="F:/MinGW/mingw64/bin/mingw32-make.exe -f &quot;E:/Google Drive/MES_APS/Model/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="F:/MinGW/mingw64/bin/mingw32-make.exe -f &quot;E:/Google Drive/MES_APS/Model/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="F:/MinGW/mingw64/bin/mingw32-make.exe -f &quot;E:/Google Drive/MES_APS/Model/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="F:/MinGW/mingw64/bin/mingw32-make.exe -f &quot;E:/Google Drive/MES_APS/Model/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Model">
+				<Option output="E:/Google Drive/MES_APS/Model/cmake-build-debug/Model.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="E:/Google Drive/MES_APS/Model/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="F:/MinGW/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/9.2.0/../../../../include/c++/9.2.0"/>
+					<Add directory="F:/MinGW/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/9.2.0/../../../../include/c++/9.2.0/x86_64-w64-mingw32"/>
+					<Add directory="F:/MinGW/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/9.2.0/../../../../include/c++/9.2.0/backward"/>
+					<Add directory="F:/MinGW/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/9.2.0/include"/>
+					<Add directory="F:/MinGW/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/9.2.0/../../../../include"/>
+					<Add directory="F:/MinGW/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/9.2.0/include-fixed"/>
+					<Add directory="F:/MinGW/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/9.2.0/../../../../x86_64-w64-mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="F:/MinGW/mingw64/bin/mingw32-make.exe -f &quot;E:/Google Drive/MES_APS/Model/cmake-build-debug/Makefile&quot;  VERBOSE=1 Model"/>
+					<CompileFile command="F:/MinGW/mingw64/bin/mingw32-make.exe -f &quot;E:/Google Drive/MES_APS/Model/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="F:/MinGW/mingw64/bin/mingw32-make.exe -f &quot;E:/Google Drive/MES_APS/Model/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="F:/MinGW/mingw64/bin/mingw32-make.exe -f &quot;E:/Google Drive/MES_APS/Model/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Model/fast">
+				<Option output="E:/Google Drive/MES_APS/Model/cmake-build-debug/Model.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="E:/Google Drive/MES_APS/Model/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="F:/MinGW/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/9.2.0/../../../../include/c++/9.2.0"/>
+					<Add directory="F:/MinGW/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/9.2.0/../../../../include/c++/9.2.0/x86_64-w64-mingw32"/>
+					<Add directory="F:/MinGW/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/9.2.0/../../../../include/c++/9.2.0/backward"/>
+					<Add directory="F:/MinGW/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/9.2.0/include"/>
+					<Add directory="F:/MinGW/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/9.2.0/../../../../include"/>
+					<Add directory="F:/MinGW/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/9.2.0/include-fixed"/>
+					<Add directory="F:/MinGW/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/9.2.0/../../../../x86_64-w64-mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="F:/MinGW/mingw64/bin/mingw32-make.exe -f &quot;E:/Google Drive/MES_APS/Model/cmake-build-debug/Makefile&quot;  VERBOSE=1 Model/fast"/>
+					<CompileFile command="F:/MinGW/mingw64/bin/mingw32-make.exe -f &quot;E:/Google Drive/MES_APS/Model/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="F:/MinGW/mingw64/bin/mingw32-make.exe -f &quot;E:/Google Drive/MES_APS/Model/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="F:/MinGW/mingw64/bin/mingw32-make.exe -f &quot;E:/Google Drive/MES_APS/Model/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="E:/Google Drive/MES_APS/Model/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="F:/MinGW/mingw64/bin/mingw32-make.exe -f &quot;E:/Google Drive/MES_APS/Model/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="F:/MinGW/mingw64/bin/mingw32-make.exe -f &quot;E:/Google Drive/MES_APS/Model/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="F:/MinGW/mingw64/bin/mingw32-make.exe -f &quot;E:/Google Drive/MES_APS/Model/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="F:/MinGW/mingw64/bin/mingw32-make.exe -f &quot;E:/Google Drive/MES_APS/Model/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="E:/Google Drive/MES_APS/Model/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="F:/MinGW/mingw64/bin/mingw32-make.exe -f &quot;E:/Google Drive/MES_APS/Model/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="F:/MinGW/mingw64/bin/mingw32-make.exe -f &quot;E:/Google Drive/MES_APS/Model/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="F:/MinGW/mingw64/bin/mingw32-make.exe -f &quot;E:/Google Drive/MES_APS/Model/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="F:/MinGW/mingw64/bin/mingw32-make.exe -f &quot;E:/Google Drive/MES_APS/Model/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="E:/Google Drive/MES_APS/Model/Batch.cpp">
+			<Option target="Model"/>
+		</Unit>
+		<Unit filename="E:/Google Drive/MES_APS/Model/Batch.h">
+			<Option target="Model"/>
+		</Unit>
+		<Unit filename="E:/Google Drive/MES_APS/Model/Environment.cpp">
+			<Option target="Model"/>
+		</Unit>
+		<Unit filename="E:/Google Drive/MES_APS/Model/Environment.h">
+			<Option target="Model"/>
+		</Unit>
+		<Unit filename="E:/Google Drive/MES_APS/Model/Event.cpp">
+			<Option target="Model"/>
+		</Unit>
+		<Unit filename="E:/Google Drive/MES_APS/Model/Event.h">
+			<Option target="Model"/>
+		</Unit>
+		<Unit filename="E:/Google Drive/MES_APS/Model/Machine.cpp">
+			<Option target="Model"/>
+		</Unit>
+		<Unit filename="E:/Google Drive/MES_APS/Model/Machine.h">
+			<Option target="Model"/>
+		</Unit>
+		<Unit filename="E:/Google Drive/MES_APS/Model/Recipe.cpp">
+			<Option target="Model"/>
+		</Unit>
+		<Unit filename="E:/Google Drive/MES_APS/Model/Recipe.h">
+			<Option target="Model"/>
+		</Unit>
+		<Unit filename="E:/Google Drive/MES_APS/Model/main.cpp">
+			<Option target="Model"/>
+		</Unit>
+		<Unit filename="E:/Google Drive/MES_APS/Model/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
