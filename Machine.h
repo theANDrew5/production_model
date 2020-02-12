@@ -9,36 +9,43 @@
 #include <vector>
 #include "Batch.h"
 #include "Recipe.h"
+#include "Event.h"
 
-//Базовый класс
+
+//Класс интерфейс
 class Machine {
 public:
     Machine(std::string name,std::vector <Recipe> recipes, bool state);
     Machine(std::string name,std::vector <Batch> batches,std::vector <Recipe> recipes, bool state);
     Machine(const Machine & p);
+    ~Machine();
 
-  //  virtual ~Machine();
+    virtual void make_event_vector()=0;//метод создаёт вектор событий
+    virtual void execute() =0;//метод выполняет событие
 
-   // virtual void execution() =0;
-private:
+protected:
     std::string _name;//имя
-    std::vector <Batch> _bathces;//входная очередь
+    std::vector <Batch> _bathces;//входная очередь в форме ссылок на партии
     std::vector <Recipe> _recipes;//рецепты на машине
+    std::vector <Event> _events;//вектор событий по порядку
     bool _state;//состояние
-    unsigned int _current_env_time;//длительность текущего события
+
 };
-/*
+
 //наследник для потоковой обработки
 class M_flow:Machine
 {
 public:
     M_flow(std::string name,std::vector <Recipe> recipes, bool state);
     M_flow(std::string name,std::vector <Batch> batches,std::vector <Recipe> recipes, bool state);
-    //M_flow(const M_flow & p);
+    M_flow(const M_flow & p);
 
-    void execution();
+    void make_event_vector();
+    ~M_flow();
 };
 
+
+/*
 //наследник обработки группой партий
 class M_group:Machine
 {
@@ -61,6 +68,5 @@ public:
     void execution();
 };
 */
-
 
 #endif //MODEL_MACHINE_H

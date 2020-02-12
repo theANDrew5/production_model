@@ -3,5 +3,5 @@
 //
 
 #include "Event.h"
-Event::Event(Machine *p, unsigned int time):_pointer(p), _time(time) {}
-Event::Event(const Event &p):_pointer(p._pointer), _time(p._time) {}
+Event::Event(std::string name, unsigned int time): _machine_name(name), _time(time) {}
+Event::Event(const Event &p):_machine_name(p._machine_name), _time(p._time) {}

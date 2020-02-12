@@ -5,13 +5,15 @@
 #ifndef MODEL_EVENT_H
 #define MODEL_EVENT_H
 
-#include "Machine.h"
-class Event {
+#include <string>
+class Event
+{
 public:
-    Event(Machine *p, unsigned int time);
-    Event(const Event &p);
+    Event(std::string name, unsigned int time);
+    Event(Event const  &p);
+
 private:
-    Machine * _pointer; //указатель на объект машины
+    std::string _machine_name; //Имя машины
     unsigned int _time;//длительность события
 
 };
