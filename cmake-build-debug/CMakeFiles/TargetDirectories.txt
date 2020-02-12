@@ -1,3 +1,0 @@
-E:/Google Drive/MES_APS/Model/cmake-build-debug/CMakeFiles/Model.dir
-E:/Google Drive/MES_APS/Model/cmake-build-debug/CMakeFiles/edit_cache.dir
-E:/Google Drive/MES_APS/Model/cmake-build-debug/CMakeFiles/rebuild_cache.dir
