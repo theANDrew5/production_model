@@ -34,19 +34,19 @@ cmake_force:
 SHELL = cmd.exe
 
 # The CMake executable.
-CMAKE_COMMAND = "F:\CLion 2019.3.2\bin\cmake\win\bin\cmake.exe"
+CMAKE_COMMAND = "C:\Program Files\JetBrains\CLion 2019.2.3\bin\cmake\win\bin\cmake.exe"
 
 # The command to remove a file.
-RM = "F:\CLion 2019.3.2\bin\cmake\win\bin\cmake.exe" -E remove -f
+RM = "C:\Program Files\JetBrains\CLion 2019.2.3\bin\cmake\win\bin\cmake.exe" -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "E:\Google Drive\MES_APS\Model"
+CMAKE_SOURCE_DIR = "D:\ANDREW's_DATA\_PROJECT"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "E:\Google Drive\MES_APS\Model\cmake-build-debug"
+CMAKE_BINARY_DIR = "D:\ANDREW's_DATA\_PROJECT\cmake-build-debug"
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -73,14 +73,14 @@ preinstall:
 CMakeFiles/Model.dir/all:
 	$(MAKE) -f CMakeFiles\Model.dir\build.make CMakeFiles/Model.dir/depend
 	$(MAKE) -f CMakeFiles\Model.dir\build.make CMakeFiles/Model.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="E:\Google Drive\MES_APS\Model\cmake-build-debug\CMakeFiles" --progress-num=1,2,3,4,5,6,7 "Built target Model"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="D:\ANDREW's_DATA\_PROJECT\cmake-build-debug\CMakeFiles" --progress-num=1,2,3,4,5,6,7 "Built target Model"
 .PHONY : CMakeFiles/Model.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/Model.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "E:\Google Drive\MES_APS\Model\cmake-build-debug\CMakeFiles" 7
+	$(CMAKE_COMMAND) -E cmake_progress_start "D:\ANDREW's_DATA\_PROJECT\cmake-build-debug\CMakeFiles" 7
 	$(MAKE) -f CMakeFiles\Makefile2 CMakeFiles/Model.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "E:\Google Drive\MES_APS\Model\cmake-build-debug\CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "D:\ANDREW's_DATA\_PROJECT\cmake-build-debug\CMakeFiles" 0
 .PHONY : CMakeFiles/Model.dir/rule
 
 # Convenience name for target.
