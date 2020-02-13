@@ -1,3 +1,0 @@
-D:/ANDREW's_DATA/_PROJECT/cmake-build-debug/CMakeFiles/Model.dir
-D:/ANDREW's_DATA/_PROJECT/cmake-build-debug/CMakeFiles/edit_cache.dir
-D:/ANDREW's_DATA/_PROJECT/cmake-build-debug/CMakeFiles/rebuild_cache.dir
