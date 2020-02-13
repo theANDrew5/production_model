@@ -1,7 +1,7 @@
 //
 // Created by User on 10-Feb-20.
 //
-//Тупо что бы проверить, работает или нет
+//
 #include "Machine.h"
 #include <algorithm>
 //конструкторы и деструктор интерфейса
