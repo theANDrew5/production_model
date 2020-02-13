@@ -16,6 +16,8 @@ _name(p._name), _bathces(p._bathces),_recipes(p._recipes), _state(p._state), _ev
 
 Machine::~Machine() = default;
 
+Global_event::Global_event(Event &ev, Machine *p):Event(ev),_pointer(p) {}
+
 //конструкторы и деструктор класса потоковой обработки
 M_flow::M_flow(std::string name, std::vector<Recipe> recipes, bool state):
 Machine(name,recipes,state) {}
@@ -57,6 +59,10 @@ void M_flow::make_event_vector()
     {
 
     }
+}
 
+Global_event M_flow::push_event()
+{
+    return Global_event(this->_events.front(),this);
 }
 

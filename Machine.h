@@ -21,6 +21,7 @@ public:
     ~Machine();
 
     virtual void make_event_vector()=0;//метод создаёт вектор событий
+    Event push_event ();//возвращает текущее событие в глобальный вектор среды
     virtual void execute() =0;//метод выполняет событие
 
 protected:
@@ -31,7 +32,14 @@ protected:
     bool _state;//состояние
 
 };
-
+class Global_event:Event //наследник с дополнительным полем, указателем на машину
+{
+public:
+    Global_event(std::string name, unsigned int time, Machine * p);
+    Global_event(Event &ev, Machine *p);
+private:
+    Machine * _pointer;
+};
 //наследник для потоковой обработки
 class M_flow:Machine
 {
@@ -41,6 +49,7 @@ public:
     M_flow(const M_flow & p);
 
     void make_event_vector();
+    Global_event push_event();
     ~M_flow();
 };
 

@@ -12,7 +12,7 @@ public:
     Event(std::string name, unsigned int time);
     Event(Event const  &p);
 
-private:
+protected:
     std::string _machine_name; //Имя машины
     unsigned int _time;//длительность события
 
