@@ -5,6 +5,8 @@
 #include "Machine.h"
 #include <algorithm>
 //конструкторы и деструктор интерфейса
+Machine::Machine() {}
+
 Machine::Machine(std::string name, std::vector<Recipe> recipes, bool state):
 _name(name), _recipes(recipes), _state(state) {}
 
@@ -19,6 +21,8 @@ Machine::~Machine() = default;
 Global_event::Global_event(Event &ev, Machine *p):Event(ev),_pointer(p) {}
 
 //конструкторы и деструктор класса потоковой обработки
+M_flow::M_flow() {}
+
 M_flow::M_flow(std::string name, std::vector<Recipe> recipes, bool state):
 Machine(name,recipes,state) {}
 
@@ -70,4 +74,45 @@ Global_event M_flow::push_event()
 void M_flow::execute()
 {
     _events.pop_back();//обрезаем последний потому что вектор развёрнут
+}
+
+std::istream & operator>> (std::istream & is, M_flow & p)//перегрузка оператора сдвига для потока ввода
+{
+    is>>p._name;
+    char ch1=0;
+    while (is.get(ch1) && ch1!='#')
+    {
+        char ch2=0;
+        while (is.get(ch2) && ch2!='/n')
+        {
+            Batch buf;
+            is>>buf;
+            p._bathces.push_back(buf);
+        }
+        while (is.get(ch2) && ch2!='/n')
+        {
+            Recipe buf;
+            is>>buf;
+            p._recipes.push_back(buf);
+        }
+        while (is.get(ch2) && ch2!='/n')
+        {
+            Event buf;
+            is>>buf;
+            p._events.push_back(buf);
+        }
+    }
+    return is;
+}
+std::ostream &operator<<(std::ostream & os, M_flow & p)//перегрузка оператора сдвига для вывода
+{
+    os<<p._name<<'/n';
+    for(Batch n:p._bathces) os<<n;
+    os<<'/n';
+    for(Recipe n:p._recipes) os<<n;
+    os<<'/n';
+    for(Event n:p._events) os<<n;
+    os<<'/n';
+
+    return os;
 }

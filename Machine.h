@@ -5,6 +5,7 @@
 #ifndef MODEL_MACHINE_H
 #define MODEL_MACHINE_H
 
+#include <iostream>
 #include <string>
 #include <vector>
 #include "Batch.h"
@@ -15,6 +16,7 @@
 //Класс интерфейс
 class Machine {
 public:
+    Machine();
     Machine(std::string name,std::vector <Recipe> recipes, bool state);
     Machine(std::string name,std::vector <Batch> batches,std::vector <Recipe> recipes, bool state);
     Machine(const Machine & p);
@@ -23,7 +25,6 @@ public:
     virtual void make_event_vector()=0;//метод создаёт вектор событий
     virtual void execute() =0;//метод выполняет событие
     Event push_event ();//возвращает текущее событие в глобальный вектор среды
-
 protected:
     std::string _name;//имя
     std::vector <Batch> _bathces;//входная очередь в форме ссылок на партии
@@ -44,6 +45,7 @@ private:
 class M_flow:Machine
 {
 public:
+    M_flow();
     M_flow(std::string name,std::vector <Recipe> recipes, bool state);
     M_flow(std::string name,std::vector <Batch> batches,std::vector <Recipe> recipes, bool state);
     M_flow(const M_flow & p);
@@ -52,6 +54,10 @@ public:
     void execute();
     Global_event push_event();
     ~M_flow();
+
+    friend std::istream & operator>> (std::istream & is, M_flow & p);
+    friend std::ostream &operator<<(std::ostream & os, M_flow & p);
+
 };
 
 

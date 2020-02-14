@@ -3,5 +3,6 @@
 //
 
 #include "Event.h"
+Event::Event(){}
 Event::Event(std::string name, unsigned int time): _machine_name(name), _time(time) {}
 Event::Event(const Event &p):_machine_name(p._machine_name), _time(p._time) {}

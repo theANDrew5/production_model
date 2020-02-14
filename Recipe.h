@@ -32,7 +32,7 @@ private:
     unsigned int _time; //константа времени рецепта
 };
 
-bool operator==(Recipe &left, Recipe &right);
+bool operator==(Recipe &left, Recipe &right);//перегрузка оператора сравнения
 
 
 

@@ -1,11 +1,11 @@
 #include <iostream>
-#include "Recipe.h"
+#include "Machine.h"
 
 int main() {
     std::cout << "Hello, World!" << std::endl;
-    Recipe rsp;
-    std::cin>>rsp;
-    std::cout<<rsp;
+    M_flow mch;
+    std::cin>>mch;
+    std::cout<<mch;
     return 0;
 
 }
