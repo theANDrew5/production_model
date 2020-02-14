@@ -29,7 +29,7 @@ protected:
     std::string _name;//имя
     std::vector <Batch> _bathces;//входная очередь в форме ссылок на партии
     std::vector <Recipe> _recipes;//рецепты на машине
-    std::vector <Event> _events;//вектор событий по порядку
+    std::vector <Event> _events = {};//вектор событий по порядку
     bool _state;//состояние
 
 };
