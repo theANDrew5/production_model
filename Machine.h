@@ -21,8 +21,8 @@ public:
     ~Machine();
 
     virtual void make_event_vector()=0;//метод создаёт вектор событий
-    Event push_event ();//возвращает текущее событие в глобальный вектор среды
     virtual void execute() =0;//метод выполняет событие
+    Event push_event ();//возвращает текущее событие в глобальный вектор среды
 
 protected:
     std::string _name;//имя
@@ -49,6 +49,7 @@ public:
     M_flow(const M_flow & p);
 
     void make_event_vector();
+    void execute();
     Global_event push_event();
     ~M_flow();
 };

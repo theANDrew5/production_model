@@ -47,6 +47,7 @@ void M_flow::make_event_vector()
                 }
                 else throw (it);//ошибка в очереди партия с неверным рецептом
             }
+            std::reverse(_events.begin(),_events.end());//разворот для ускорения обработки, потому что обрезать с конца быстрее
             throw;//ок очередь обработана
         }
         else
@@ -63,6 +64,10 @@ void M_flow::make_event_vector()
 
 Global_event M_flow::push_event()
 {
-    return Global_event(this->_events.front(),this);
+    return Global_event(*_events.end(),this);
 }
 
+void M_flow::execute()
+{
+    _events.pop_back();//обрезаем последний потому что вектор развёрнут
+}

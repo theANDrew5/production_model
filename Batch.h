@@ -6,8 +6,10 @@
 #define MODEL_BATCH_H
 
 #include <string>
-#include "Recipe.h"
 #include <vector>
+#include <iostream>
+#include "Recipe.h"
+
 //класс партии
 class Batch {
 public:
