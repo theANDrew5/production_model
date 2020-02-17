@@ -17,15 +17,18 @@
 class Machine {
 public:
     Machine();
-    Machine(std::string name,std::vector <Recipe> recipes, bool state);
-    Machine(std::string name,std::vector <Batch> batches,std::vector <Recipe> recipes, bool state);
+    Machine(std::string type,std::string name,
+            std::vector <Batch> batches,std::vector <Recipe> recipes, std::vector<Event> events, bool state);
     Machine(const Machine & p);
     ~Machine();
 
     virtual void make_event_vector()=0;//метод создаёт вектор событий
     virtual void execute() =0;//метод выполняет событие
     Event push_event ();//возвращает текущее событие в глобальный вектор среды
+
+    friend std::ostream &operator<<(std::ostream & os, Machine & p);
 protected:
+    std::string _type;//тип обработки
     std::string _name;//имя
     std::vector <Batch> _bathces;//входная очередь в форме ссылок на партии
     std::vector <Recipe> _recipes;//рецепты на машине
@@ -42,22 +45,19 @@ private:
     Machine * _pointer;
 };
 //наследник для потоковой обработки
-class M_flow:Machine
+class M_flow: public Machine
 {
 public:
     M_flow();
-    M_flow(std::string name,std::vector <Recipe> recipes, bool state);
-    M_flow(std::string name,std::vector <Batch> batches,std::vector <Recipe> recipes, bool state);
+    //M_flow(std::string name,std::vector <Recipe> recipes, bool state);
+    M_flow(std::string type,std::string name,
+           std::vector <Batch> batches,std::vector <Recipe> recipes, std::vector<Event> events, bool state);
     M_flow(const M_flow & p);
 
     void make_event_vector();
     void execute();
     Global_event push_event();
     ~M_flow();
-
-    friend std::istream & operator>> (std::istream & is, M_flow & p);
-    friend std::ostream &operator<<(std::ostream & os, M_flow & p);
-
 };
 
 

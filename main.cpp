@@ -32,8 +32,10 @@ int main() {
     for(Batch n:v_bat) std::cout<<n<<' ';
     std::cout<<'\n';
     bool b = true;
-    M_flow mch("mh1",v_bat,r1_vector,b);
-    std::cout<<mch;
+    M_flow mch("flow","mh1",v_bat,r1_vector,(std::vector<Event>){},b);
+    Machine *p = &mch;
+    p->make_event_vector();
+    std::cout<<*p;
     return 0;
 
 }

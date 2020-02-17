@@ -7,11 +7,9 @@
 //конструкторы и деструктор интерфейса
 Machine::Machine() {}
 
-Machine::Machine(std::string name, std::vector<Recipe> recipes, bool state):
-_name(name), _recipes(recipes), _state(state) {}
-
-Machine::Machine(std::string name, std::vector<Batch> batches, std::vector<Recipe> recipes, bool state):
-_name(name), _bathces(batches),_recipes(recipes), _state(state) {}
+Machine::Machine(std::string type,std::string name,
+                 std::vector <Batch> batches,std::vector <Recipe> recipes, std::vector<Event> events, bool state):
+_type(type),_name(name), _bathces(batches),_recipes(recipes),_events(events), _state(state) {}
 
 Machine::Machine(const Machine &p):
 _name(p._name), _bathces(p._bathces),_recipes(p._recipes), _state(p._state), _events(p._events) {}
@@ -23,11 +21,11 @@ Global_event::Global_event(Event &ev, Machine *p):Event(ev),_pointer(p) {}
 //конструкторы и деструктор класса потоковой обработки
 M_flow::M_flow() {}
 
-M_flow::M_flow(std::string name, std::vector<Recipe> recipes, bool state):
-Machine(name,recipes,state) {}
+//M_flow::M_flow(std::string name, std::vector<Recipe> recipes, bool state):Machine(name,recipes,state) {}
 
-M_flow::M_flow(std::string name,std::vector <Batch> batches,std::vector <Recipe> recipes, bool state):
-Machine(name,batches,recipes,state){}
+M_flow::M_flow(std::string type,std::string name,
+        std::vector <Batch> batches,std::vector <Recipe> recipes, std::vector<Event> events, bool state):
+Machine(type,name,batches,recipes,events,state){}
 
 M_flow::M_flow(const M_flow &p):Machine(p) {}
 
@@ -44,15 +42,14 @@ void M_flow::make_event_vector()
             for (Batch it : _bathces)
             {
                 Recipe * rcp = it.get_first();
-                if(std::any_of(_recipes.begin(),_recipes.end(),[rcp](Recipe r){return rcp==&r;}))
+                if(std::any_of(_recipes.begin(),_recipes.end(),[rcp](Recipe r){return *rcp==r;;}))//
                 {
-                    Machine * t =0;
                     this->_events.push_back(Event(this->_name,it.get_first()->get_time()*it.get_count()));
                 }
                 else throw (it);//ошибка в очереди партия с неверным рецептом
             }
             std::reverse(_events.begin(),_events.end());//разворот для ускорения обработки, потому что обрезать с конца быстрее
-            throw;//ок очередь обработана
+            //throw;//ок очередь обработана
         }
         else
         {
@@ -75,7 +72,7 @@ void M_flow::execute()
 {
     _events.pop_back();//обрезаем последний потому что вектор развёрнут
 }
-
+/*
 std::istream & operator>> (std::istream & is, M_flow & p)//перегрузка оператора сдвига для потока ввода
 {
     is>>p._name;
@@ -104,8 +101,10 @@ std::istream & operator>> (std::istream & is, M_flow & p)//перегрузка 
     }
     return is;
 }
-std::ostream &operator<<(std::ostream & os, M_flow & p)//перегрузка оператора сдвига для вывода
+ */
+std::ostream &operator<<(std::ostream & os, Machine & p)//перегрузка оператора сдвига для вывода
 {
+    os<<p._type<<'\n';
     os<<p._name<<'\n';
     for(Batch n:p._bathces) os<<n<<' ';
     os<<'\n';
@@ -113,6 +112,6 @@ std::ostream &operator<<(std::ostream & os, M_flow & p)//перегрузка о
     os<<'\n';
     for(Event n:p._events) os<<n<<' ';
     os<<p._state;
-
+    os<<'\n'<<'#';
     return os;
 }
