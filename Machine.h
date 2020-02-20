@@ -16,21 +16,26 @@
 //Класс интерфейс
 class Machine {
 public:
-    Machine();
-    Machine(std::string type,std::string name,
+    Machine();//конструктор без параметров
+    Machine(std::string name,//конструктор со всеми параметрами
             std::vector <Batch> batches,std::vector <Recipe> recipes, std::vector<Event> events, bool state);
-    Machine(const Machine & p);
-    ~Machine();
+    Machine(std::string name,//конструктор без вектора событий
+            std::vector <Batch> batches,std::vector <Recipe> recipes, bool state);
+    Machine(std::string name,//конструктор без вектора партий
+            std::vector <Recipe> recipes, bool state);
+    Machine(const Machine & p);//конструктор копирования
+    ~Machine();//деструктор
 
     virtual void make_event_vector()=0;//метод создаёт вектор событий
     virtual void execute() =0;//метод выполняет событие
     Event push_event ();//возвращает текущее событие в глобальный вектор среды
 
-    friend std::ostream &operator<<(std::ostream & os, Machine & p);
+
+    friend std::ostream &operator<<(std::ostream & os, Machine & p);//перегрузка оператора <<
 protected:
     std::string _type;//тип обработки
     std::string _name;//имя
-    std::vector <Batch> _bathces;//входная очередь в форме ссылок на партии
+    std::vector <Batch> _bathces;//вектор партий, входная очередь
     std::vector <Recipe> _recipes;//рецепты на машине
     std::vector <Event> _events = {};//вектор событий по порядку
     bool _state;//состояние
@@ -49,9 +54,12 @@ class M_flow: public Machine
 {
 public:
     M_flow();
-    //M_flow(std::string name,std::vector <Recipe> recipes, bool state);
-    M_flow(std::string type,std::string name,
-           std::vector <Batch> batches,std::vector <Recipe> recipes, std::vector<Event> events, bool state);
+    M_flow(std::string name,//конструктор со всеми параметрами
+    std::vector <Batch> batches,std::vector <Recipe> recipes, std::vector<Event> events, bool state);
+    M_flow(std::string name,//конструктор без вектора событий
+    std::vector <Batch> batches,std::vector <Recipe> recipes, bool state);
+    M_flow(std::string name,//конструктор без вектора партий
+    std::vector <Recipe> recipes, bool state);
     M_flow(const M_flow & p);
 
     void make_event_vector();

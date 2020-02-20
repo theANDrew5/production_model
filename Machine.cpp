@@ -7,9 +7,15 @@
 //конструкторы и деструктор интерфейса
 Machine::Machine() {}
 
-Machine::Machine(std::string type,std::string name,
+Machine::Machine(std::string name, std::vector<Recipe> recipes, bool state):
+        _name(name), _recipes(recipes), _state(state){}
+
+Machine::Machine(std::string name, std::vector<Batch> batches, std::vector<Recipe> recipes, bool state):
+        _name(name), _bathces(batches),_recipes(recipes), _state(state){}
+
+Machine::Machine(std::string name,
                  std::vector <Batch> batches,std::vector <Recipe> recipes, std::vector<Event> events, bool state):
-_type(type),_name(name), _bathces(batches),_recipes(recipes),_events(events), _state(state) {}
+_name(name), _bathces(batches),_recipes(recipes),_events(events), _state(state) {}
 
 Machine::Machine(const Machine &p):
 _name(p._name), _bathces(p._bathces),_recipes(p._recipes), _state(p._state), _events(p._events) {}
@@ -21,13 +27,29 @@ Global_event::Global_event(Event &ev, Machine *p):Event(ev),_pointer(p) {}
 //конструкторы и деструктор класса потоковой обработки
 M_flow::M_flow() {}
 
-//M_flow::M_flow(std::string name, std::vector<Recipe> recipes, bool state):Machine(name,recipes,state) {}
+M_flow::M_flow(std::string name, std::vector<Recipe> recipes, bool state):
+        Machine(name,recipes,state)
+{
+    _type="flow";
+}
 
-M_flow::M_flow(std::string type,std::string name,
+M_flow::M_flow(std::string name, std::vector<Batch> batches, std::vector<Recipe> recipes, bool state):
+        Machine(name, batches, recipes, state)
+{
+    _type="flow";
+}
+
+M_flow::M_flow(std::string name,
         std::vector <Batch> batches,std::vector <Recipe> recipes, std::vector<Event> events, bool state):
-Machine(type,name,batches,recipes,events,state){}
+Machine(name,batches,recipes,events,state)
+{
+    _type="flow";
+}
 
-M_flow::M_flow(const M_flow &p):Machine(p) {}
+M_flow::M_flow(const M_flow &p):Machine(p)
+{
+    _type="flow";
+}
 
 M_flow::~M_flow() = default;
 
