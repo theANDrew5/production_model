@@ -94,9 +94,12 @@ void M_flow::execute()
 {
     _events.pop_back();//обрезаем последний потому что вектор развёрнут
 }
+
+
 /*
-std::istream & operator>> (std::istream & is, M_flow & p)//перегрузка оператора сдвига для потока ввода
+std::istream & operator>> (std::istream & is, Machine & p)//перегрузка оператора сдвига для потока ввода
 {
+    is>>
     is>>p._name;
     char ch1=0;
     while (is.get(ch1) && ch1!='#')
@@ -124,16 +127,43 @@ std::istream & operator>> (std::istream & is, M_flow & p)//перегрузка 
     return is;
 }
  */
-std::ostream &operator<<(std::ostream & os, Machine & p)//перегрузка оператора сдвига для вывода
+std::istream &operator>>(std::istream &is, Machine &p) {
+    is>>p._type;
+    is>>p._name;
+    is>>p._state;
+    while(is.peek()!='#') {
+        char ch2 = 0;
+        while (is.peek()!= '\n') {
+            Batch buf;
+            is >> buf;
+            p._bathces.push_back(buf);
+        }
+        while (is.peek()!= '\n') {
+            Recipe buf;
+            is >> buf;
+            p._recipes.push_back(buf);
+        }
+        while (is.peek()!= '\n') {
+            Event buf;
+            is >> buf;
+            p._events.push_back(buf);
+        }
+    }
+    return is;
+}
+
+
+std::ostream &operator<<(std::ostream & os, Machine &p)//перегрузка оператора сдвига для вывода
 {
     os<<p._type<<'\n';
     os<<p._name<<'\n';
-    for(Batch n:p._bathces) os<<n<<' ';
+    os<<p._state<<'\n';
+    for(Batch n:p._bathces) os<<n<<">";
     os<<'\n';
-    for(Recipe n:p._recipes) os<<n<<' ';
+    for(Recipe n:p._recipes) os<<n<<">";
     os<<'\n';
-    for(Event n:p._events) os<<n<<' ';
-    os<<p._state;
-    os<<'\n'<<'#';
+    for(Event n:p._events) os<<n<<">";
+    os<<'\n'<<'#'<<'\n';
     return os;
 }
+

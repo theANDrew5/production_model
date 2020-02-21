@@ -30,8 +30,9 @@ public:
     virtual void execute() =0;//метод выполняет событие
     Event push_event ();//возвращает текущее событие в глобальный вектор среды
 
-
+    friend std::istream &operator>>(std::istream & is, Machine &p);//перегрузка оператора <<
     friend std::ostream &operator<<(std::ostream & os, Machine & p);//перегрузка оператора <<
+
 protected:
     std::string _type;//тип обработки
     std::string _name;//имя
@@ -55,11 +56,11 @@ class M_flow: public Machine
 public:
     M_flow();
     M_flow(std::string name,//конструктор со всеми параметрами
-    std::vector <Batch> batches,std::vector <Recipe> recipes, std::vector<Event> events, bool state);
+            std::vector <Batch> batches,std::vector <Recipe> recipes, std::vector<Event> events, bool state);
     M_flow(std::string name,//конструктор без вектора событий
-    std::vector <Batch> batches,std::vector <Recipe> recipes, bool state);
+            std::vector <Batch> batches,std::vector <Recipe> recipes, bool state);
     M_flow(std::string name,//конструктор без вектора партий
-    std::vector <Recipe> recipes, bool state);
+            std::vector <Recipe> recipes, bool state);
     M_flow(const M_flow & p);
 
     void make_event_vector();

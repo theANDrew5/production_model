@@ -15,3 +15,22 @@ Recipe * Batch::get_first() {
 const unsigned int Batch::get_count() {
     return this->_count;
 }
+
+std::istream & operator>> (std::istream & is, Batch & p)//перегрузка оператора сдвига для потока ввода
+{
+    is>>p._name>>p._count;
+    while (is.peek()!='\t')
+    {
+        Recipe buf;
+        is>>buf;
+        p._recipes.push_back(buf);
+    }
+    return is;
+}
+
+std::ostream &operator<<(std::ostream & os, Batch & p)//перегрузка оператора сдвига для вывода
+{
+    os<<p._name<<' '<<p._count;
+    for (Recipe n:p._recipes) os<<' '<<n;
+    return os;
+}

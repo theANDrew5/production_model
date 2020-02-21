@@ -19,6 +19,16 @@ unsigned int Recipe::get_time()
 {
     return this->_time;
 }
+
+std::istream & operator>> (std::istream & is, Recipe & p)//перегрузка оператора сдвига для потока ввода
+{
+    is>>p._name>>p._time;
+    return is;
+}
+std::ostream &operator<<(std::ostream & os, Recipe & p)//перегрузка оператора сдвига для вывода
+{
+    return os<<p._name<<' '<<p._time;
+}
 /*
 std::istream & Recipe::operator>>(std::istream &is)
 {
