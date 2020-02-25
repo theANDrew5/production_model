@@ -131,23 +131,34 @@ std::istream &operator>>(std::istream &is, Machine &p) {
     is>>p._type;
     is>>p._name;
     is>>p._state;
-    while(is.peek()!='#') {
-        char ch2 = 0;
-        while (is.peek()!= '\n') {
+    unsigned char n = 0;
+    while(is.peek()!='#')
+    {
+        std::stringstream buf_str;
+        std::string buf_string;
+        //std::getline(is,buf_string);
+        //is>>buf_string;
+        is.getline(buf_string);
+        buf_str.str(buf_string);
+        while (buf_str.peek()!=-1 && n==0)
+        {
             Batch buf;
             is >> buf;
             p._bathces.push_back(buf);
         }
-        while (is.peek()!= '\n') {
+        while (buf_str.peek()!=-1 && n==1)
+        {
             Recipe buf;
             is >> buf;
             p._recipes.push_back(buf);
         }
-        while (is.peek()!= '\n') {
+        while (buf_str.peek()!=-1 && n==2)
+        {
             Event buf;
             is >> buf;
             p._events.push_back(buf);
         }
+        ++n;
     }
     return is;
 }
@@ -158,11 +169,11 @@ std::ostream &operator<<(std::ostream & os, Machine &p)//перегрузка о
     os<<p._type<<'\n';
     os<<p._name<<'\n';
     os<<p._state<<'\n';
-    for(Batch n:p._bathces) os<<n<<">";
+    for(Batch n:p._bathces) os<<n<<'\t';
     os<<'\n';
-    for(Recipe n:p._recipes) os<<n<<">";
+    for(Recipe n:p._recipes) os<<n<<' ';
     os<<'\n';
-    for(Event n:p._events) os<<n<<">";
+    for(Event n:p._events) os<<n<<' ';
     os<<'\n'<<'#'<<'\n';
     return os;
 }

@@ -8,6 +8,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <sstream>
 #include "Batch.h"
 #include "Recipe.h"
 #include "Event.h"

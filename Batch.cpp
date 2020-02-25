@@ -18,13 +18,22 @@ const unsigned int Batch::get_count() {
 
 std::istream & operator>> (std::istream & is, Batch & p)//перегрузка оператора сдвига для потока ввода
 {
-    is>>p._name>>p._count;
+    //std::cout<<is.eof()<<' ';
+    is>>p._name;
+    //std::cout<<is.eof()<<' ';
+    is>>p._count;
+    //std::cout<<is.eof()<<' ';
     while (is.peek()!='\t')
     {
         Recipe buf;
         is>>buf;
         p._recipes.push_back(buf);
     }
+    std::cout<<is.tellg()<<'\t';
+    //std::cout<<is.eof()<<' ';
+    is.get();
+    //std::cout<<is.eof()<<'\n';
+    std::cout<<is.tellg()<<'\n';
     return is;
 }
 
