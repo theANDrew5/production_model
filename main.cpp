@@ -25,10 +25,7 @@ int main() {
     M_flow mch2;
     std::cin>>mch2;
     std::cout<<mch2;
-
-    /*std::string str_buf;
-    std::getline(std::cin,str_buf);
-    std::stringstream buf_stream;
+    /*std::stringstream buf_stream;
     buf_stream.str(str_buf);
 
     while (buf_stream.peek()!=-1)

@@ -131,35 +131,58 @@ std::istream &operator>>(std::istream &is, Machine &p) {
     is>>p._type;
     is>>p._name;
     is>>p._state;
-    unsigned char n = 0;
+    is.get();//потому что >> не читает /n и его захватывает getline
+    while (is.peek()!='\n')
+    {
+        std::stringstream buf_str;
+        std::string buf_string;
+        std::getline(is,buf_string,'\t');
+        buf_str.str(buf_string);
+        Batch buf;
+        buf_str>>buf;
+        p._bathces.push_back(buf);
+    }
+    is.get();
+    while (is.peek()!='\n')
+    {
+        Recipe buf;
+        is >> buf;
+        p._recipes.push_back(buf);
+    }
+    is.get();
+    while (is.peek()!='\n')
+    {
+        Event buf;
+        is >> buf;
+        p._events.push_back(buf);
+    }
+    /*
     while(is.peek()!='#')
     {
         std::stringstream buf_str;
         std::string buf_string;
-        //std::getline(is,buf_string);
-        //is>>buf_string;
-        is.getline(buf_string);
+        std::getline(is,buf_string);
         buf_str.str(buf_string);
         while (buf_str.peek()!=-1 && n==0)
         {
             Batch buf;
-            is >> buf;
+            buf_str >> buf;
             p._bathces.push_back(buf);
         }
         while (buf_str.peek()!=-1 && n==1)
         {
             Recipe buf;
-            is >> buf;
+            buf_str >> buf;
             p._recipes.push_back(buf);
         }
         while (buf_str.peek()!=-1 && n==2)
         {
             Event buf;
-            is >> buf;
+            buf_str >> buf;
             p._events.push_back(buf);
         }
         ++n;
-    }
+    }*/
     return is;
 }
 
