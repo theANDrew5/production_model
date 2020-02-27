@@ -95,38 +95,6 @@ void M_flow::execute()
     _events.pop_back();//обрезаем последний потому что вектор развёрнут
 }
 
-
-/*
-std::istream & operator>> (std::istream & is, Machine & p)//перегрузка оператора сдвига для потока ввода
-{
-    is>>
-    is>>p._name;
-    char ch1=0;
-    while (is.get(ch1) && ch1!='#')
-    {
-        char ch2=0;
-        while (is.get(ch2) && ch2!='\n')
-        {
-            Batch buf;
-            is>>buf;
-            p._bathces.push_back(buf);
-        }
-        while (is.get(ch2) && ch2!='\n')
-        {
-            Recipe buf;
-            is>>buf;
-            p._recipes.push_back(buf);
-        }
-        while (is.get(ch2) && ch2!='\n')
-        {
-            Event buf;
-            is>>buf;
-            p._events.push_back(buf);
-        }
-    }
-    return is;
-}
- */
 std::istream &operator>>(std::istream &is, Machine &p) {
     is>>p._type;
     is>>p._name;
@@ -142,47 +110,20 @@ std::istream &operator>>(std::istream &is, Machine &p) {
         buf_str>>buf;
         p._bathces.push_back(buf);
     }
-    is.get();
+    is.get();//потому что >> не читает /n
     while (is.peek()!='\n')
     {
         Recipe buf;
         is >> buf;
         p._recipes.push_back(buf);
     }
-    is.get();
+    is.get();//потому что >> не читает /n
     while (is.peek()!='\n')
     {
         Event buf;
         is >> buf;
         p._events.push_back(buf);
     }
-    /*
-    while(is.peek()!='#')
-    {
-        std::stringstream buf_str;
-        std::string buf_string;
-        std::getline(is,buf_string);
-        buf_str.str(buf_string);
-        while (buf_str.peek()!=-1 && n==0)
-        {
-            Batch buf;
-            buf_str >> buf;
-            p._bathces.push_back(buf);
-        }
-        while (buf_str.peek()!=-1 && n==1)
-        {
-            Recipe buf;
-            buf_str >> buf;
-            p._recipes.push_back(buf);
-        }
-        while (buf_str.peek()!=-1 && n==2)
-        {
-            Event buf;
-            buf_str >> buf;
-            p._events.push_back(buf);
-        }
-        ++n;
-    }*/
     return is;
 }
 
@@ -197,7 +138,7 @@ std::ostream &operator<<(std::ostream & os, Machine &p)//перегрузка о
     for(Recipe n:p._recipes) os<<n<<' ';
     os<<'\n';
     for(Event n:p._events) os<<n<<' ';
-    os<<'\n'<<'#'<<'\n';
+    os<<'\n';
     return os;
 }
 
