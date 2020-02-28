@@ -6,18 +6,19 @@
 #define MODEL_BATCH_H
 
 #include <string>
-#include <vector>
+#include <deque>
 #include <iostream>
+#include <algorithm>
 #include "Recipe.h"
 
 //класс партии
 class Batch {
 public:
     Batch();//конструктор пустого экземпляра
-    Batch(std::string name, unsigned int count, std::vector <Recipe> recipes);//конструктор с параметрами
+    Batch(std::string name, unsigned int count, std::deque <Recipe> recipes);//конструктор с параметрами
     Batch(const Batch &p);//конструктор копирования
 
-    Recipe * get_first();//возвращает первый рецепт в маршрутном листе
+    Recipe & get_first();//возвращает первый рецепт в маршрутном листе
     const unsigned int get_count();
 
     friend std::istream & operator>> (std::istream & is, Batch & p);//перегрузка оператора сдвига для потока ввода
@@ -25,7 +26,7 @@ public:
 private:
     std::string _name; //имя партии
     unsigned int _count; //число пластин
-    std::vector <Recipe> _recipes;//вектор рецептов партии он же маршрутный лист
+    std::deque <Recipe> _recipes;//маршрутный лист / вектор для быстрого доступа
 
 };
 

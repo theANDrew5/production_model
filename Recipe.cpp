@@ -43,6 +43,11 @@ os<<this->_name<<' '<< this->_time<<'\n';
 }*/
 bool operator==(Recipe &left, Recipe &right)
 {
-    if(left.get_name()==right.get_name() && left.get_time()==right.get_time()) return true;
+    if(left._name==right._name && left._time==right._time) return true;
+    else return false;
+}
+bool operator==(const Recipe &left, const Recipe &right)
+{
+    if(left._name==right._name && left._time==right._time) return true;
     else return false;
 }

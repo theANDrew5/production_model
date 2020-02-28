@@ -20,13 +20,14 @@ public:
 
     friend std::istream & operator>> (std::istream & is, Recipe & p);//перегрузка оператора сдвига для потока ввода
     friend std::ostream &operator<<(std::ostream & os, Recipe & p);//перегрузка оператора сдвига для вывода
-
+    friend bool operator==(Recipe &left, Recipe &right);//перегрузка оператора сравнения
+    friend bool operator==(const Recipe &left, const Recipe &right);//перегрузка оператора сравнения
 private:
     std::string _name; //имя рецепта
     unsigned int _time; //константа времени рецепта
 };
 
-bool operator==(Recipe &left, Recipe &right);//перегрузка оператора сравнения
+
 
 
 

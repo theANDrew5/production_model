@@ -8,7 +8,9 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <list>
 #include <sstream>
+#include <functional>
 #include "Batch.h"
 #include "Recipe.h"
 #include "Event.h"
@@ -19,11 +21,11 @@ class Machine {
 public:
     Machine();//конструктор без параметров
     Machine(std::string name,//конструктор со всеми параметрами
-            std::vector <Batch> batches,std::vector <Recipe> recipes, std::vector<Event> events, bool state);
+            std::list <std::reference_wrapper<Batch>> batches,std::deque <Recipe> recipes, std::list<Event> events, bool state);
     Machine(std::string name,//конструктор без вектора событий
-            std::vector <Batch> batches,std::vector <Recipe> recipes, bool state);
+            std::list <std::reference_wrapper<Batch>> batches,std::deque <Recipe> recipes, bool state);
     Machine(std::string name,//конструктор без вектора партий
-            std::vector <Recipe> recipes, bool state);
+            std::deque <Recipe> recipes, bool state);
     Machine(const Machine & p);//конструктор копирования
     ~Machine();//деструктор
 
@@ -37,9 +39,9 @@ public:
 protected:
     std::string _type;//тип обработки
     std::string _name;//имя
-    std::vector <Batch> _bathces;//вектор партий, входная очередь
-    std::vector <Recipe> _recipes;//рецепты на машине
-    std::vector <Event> _events = {};//вектор событий по порядку
+    std::list <std::reference_wrapper<Batch>> _bathces;// входная очередь вв виде ссылок на партии
+    std::deque <Recipe> _recipes;//рецепты на машине
+    std::list <Event> _events = {};//последовательность событий по порядку
     bool _state;//состояние
 
 };
@@ -57,11 +59,11 @@ class M_flow: public Machine
 public:
     M_flow();
     M_flow(std::string name,//конструктор со всеми параметрами
-            std::vector <Batch> batches,std::vector <Recipe> recipes, std::vector<Event> events, bool state);
+           std::list <std::reference_wrapper<Batch>> batches,std::deque <Recipe> recipes, std::list<Event> events, bool state);
     M_flow(std::string name,//конструктор без вектора событий
-            std::vector <Batch> batches,std::vector <Recipe> recipes, bool state);
+    std::list <std::reference_wrapper<Batch>> batches,std::deque <Recipe> recipes, bool state);
     M_flow(std::string name,//конструктор без вектора партий
-            std::vector <Recipe> recipes, bool state);
+           std::deque <Recipe> recipes, bool state);
     M_flow(const M_flow & p);
 
     void make_event_vector();
