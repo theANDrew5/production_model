@@ -37,3 +37,7 @@ std::ostream &operator<<(std::ostream & os, Batch & p)//перегрузка о�
     for (Recipe n:p._recipes) os<<' '<<n;
     return os;
 }
+
+std::string Batch::get_name() {
+    return this->_name;
+}

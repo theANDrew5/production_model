@@ -4,6 +4,12 @@
 //
 #include "Machine.h"
 #include <algorithm>
+
+//коструктор Mch_event
+Mch_ev::Mch_ev(Batch &p, unsigned int t):_b_ptr(p),_time(t){}
+Mch_ev::Mch_ev(Mch_ev &p):_b_ptr(p._b_ptr),_time(p._time) {}
+
+
 //конструкторы и деструктор интерфейса
 Machine::Machine() {}
 
@@ -14,16 +20,11 @@ Machine::Machine(std::string name,
                  std::list <std::reference_wrapper<Batch>> batches,std::deque <Recipe> recipes, bool state):
 _name(name), _bathces(batches),_recipes(recipes), _state(state){}
 
-Machine::Machine(std::string name, std::list <std::reference_wrapper<Batch>> batches,
-        std::deque <Recipe> recipes, std::list<Event> events, bool state):
-_name(name), _bathces(batches),_recipes(recipes),_events(events), _state(state) {}
-
 Machine::Machine(const Machine &p):
-_name(p._name), _bathces(p._bathces),_recipes(p._recipes), _state(p._state), _events(p._events) {}
+_name(p._name), _bathces(p._bathces),_recipes(p._recipes), _state(p._state) {}
 
 Machine::~Machine() = default;
 
-Global_event::Global_event(Event &ev, Machine *p):Event(ev),_pointer(p) {}
 
 //конструкторы и деструктор класса потоковой обработки
 M_flow::M_flow() {}
@@ -40,13 +41,6 @@ M_flow::M_flow(std::string name, std::list<std::reference_wrapper<Batch>> batche
     _type="flow";
 }
 
-M_flow::M_flow(std::string name,
-               std::list <std::reference_wrapper<Batch>> batches,std::deque <Recipe> recipes, std::list<Event> events, bool state):
-Machine(name,batches,recipes,events,state)
-{
-    _type="flow";
-}
-
 M_flow::M_flow(const M_flow &p):Machine(p)
 {
     _type="flow";
@@ -54,43 +48,39 @@ M_flow::M_flow(const M_flow &p):Machine(p)
 
 M_flow::~M_flow() = default;
 
+
 //Метод выполняет рассчёт последовательности по порядку
-void M_flow::make_event_vector()
+Mch_ev M_flow::push_ev()
 {
-
-        if (!_bathces.empty())
+    if (!_bathces.empty())
+    {
+        Batch &it=_bathces.front();
+        Recipe &rcp = it.get_first();
+        if(std::any_of(_recipes.begin(),_recipes.end(),[rcp](Recipe const r){return rcp==r;}))
+        //проверка рецептов
         {
-            for (Batch &it : _bathces)
-            {
-                Recipe &rcp = it.get_first();
-                if(std::any_of(_recipes.begin(),_recipes.end(),[rcp](Recipe const r){return rcp==r;}))
-                //проверка рецептов
-                {
-                    this->_events.push_back (Event(rcp.get_time()*it.get_count()));
-                }
-                else throw (it);//ошибка в очереди партия с неверным рецептом
-            }
-            //throw;//ок очередь обработана
+            return  Mch_ev(it,rcp.get_time()*it.get_count()); //OK
         }
-        else
-        {
-            Batch *ptr= nullptr;
-            throw (ptr) ; //очередь пуста
-        }
-
+        else throw (it);//ошибка в очереди партия с неверным рецептом
+    }
+    else
+    {
+        Batch *ptr= nullptr;
+        throw (ptr) ; //очередь пуста
+    }
  }
 
-Global_event M_flow::push_event()
+void M_flow::execute()//выполнение события, просто удаляем ссылку на партию
 {
-    return Global_event(*_events.begin(),this);
+    this->_bathces.pop_front();
 }
 
-void M_flow::execute()
+std::string M_flow::get_name()
 {
-    _events.pop_front();
-
+    return this->_name;
 }
 
+/*
 std::istream &operator>>(std::istream &is, Machine &p) {
     is>>p._type;
     is>>p._name;
@@ -122,19 +112,20 @@ std::istream &operator>>(std::istream &is, Machine &p) {
     }
     return is;
 }
-
+*/
 
 std::ostream &operator<<(std::ostream & os, Machine &p)//перегрузка оператора сдвига для вывода
 {
     os<<p._type<<'\n';
     os<<p._name<<'\n';
     os<<p._state<<'\n';
-    for(Batch n:p._bathces) os<<n<<'\t';
-    os<<'\n';
     for(Recipe n:p._recipes) os<<n<<' ';
     os<<'\n';
-    for(Event n:p._events) os<<n<<' ';
+    for(Batch n:p._bathces) os<<n.get_name()<<' ';
     os<<'\n';
     return os;
 }
+
+
+
 

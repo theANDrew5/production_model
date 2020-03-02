@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include "Machine.h"
+#include "Event.h"
 
 int main() {
 
@@ -11,14 +12,13 @@ int main() {
     std::list <Batch> lst_bat = {Batch ("btc1",10,r1_d),Batch ("btc2",5,r1_d),
                                  Batch ("btc3",15,r1_d)};
     std::list <std::reference_wrapper<Batch>> lst_bat_ptr;
-    for (Batch & n:lst_bat) lst_bat_ptr.push_back(n);
-    //for (Batch & n:lst_bat_ptr) std::cout<<n<<'\t';
-    Machine * m_ptr = new M_flow("mch1",lst_bat_ptr,r1_d, true);
-    m_ptr->make_event_vector();
-    std::cout<<*m_ptr<<'#'<<'\n';
-    Machine *m2_ptr = new M_flow();
-    std::cin>>*m2_ptr;
-    std::cout<<*m2_ptr;
+
+    M_flow mch;
+    Machine& mch_ptr=mch;
+    Batch & b_ptr = lst_bat.front();
+    Event ev(mch_ptr,b_ptr,1000);
+
+
     return 0;
 
 }

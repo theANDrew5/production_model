@@ -20,7 +20,7 @@ public:
 
     Recipe & get_first();//возвращает первый рецепт в маршрутном листе
     const unsigned int get_count();
-
+    std::string get_name();
     friend std::istream & operator>> (std::istream & is, Batch & p);//перегрузка оператора сдвига для потока ввода
     friend std::ostream &operator<<(std::ostream & os, Batch & p);//перегрузка оператора сдвига для вывода
 private:

@@ -7,18 +7,27 @@
 
 #include <iostream>
 #include <string>
+#include "Batch.h"
+#include "Machine.h"
+
+class Environment;//для функции read_machines
+
+
 class Event
 {
 public:
     Event();
-    Event(unsigned int time);
+    Event(Machine &m_p, Batch& b_p, unsigned int time);
     Event(Event const  &p);
 
-    friend std::istream & operator>> (std::istream & is, Event & p);//перегрузка оператора сдвига для потока ввода
     friend std::ostream &operator<<(std::ostream & os, Event & p);//перегрузка оператора сдвига для вывода
 
-protected:
+private:
+    Machine& _m_ptr;
+    Batch& _b_ptr;
     unsigned int _time;//длительность события
+
+    //friend void read_ev(std::istream & is, Event &ptr_ev, Environment &ptr_e);
 };
 
 
