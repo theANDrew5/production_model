@@ -3,12 +3,27 @@
 //
 
 #include "Recipe.h"
-Recipe::Recipe()
+
+
+Recipe::Recipe():
+	_name(""), _time(0), recipeSettingTime(0)
 {
 
 }
-Recipe::Recipe(std::string name, unsigned int time):_name(name),_time(time) {}
-Recipe::Recipe(const Recipe & p): _name(p._name), _time(p._time) {}
+
+
+Recipe::Recipe(std::string name, unsigned int time, unsigned int recSetTime):
+	_name(name), _time(time), recipeSettingTime(recSetTime)
+{
+
+}
+
+
+Recipe::Recipe(const Recipe & p): 
+	_name(p._name), _time(p._time), recipeSettingTime(p.recipeSettingTime)
+{
+
+}
 
 std::string Recipe::get_name()
 {
@@ -19,6 +34,42 @@ unsigned int Recipe::get_time()
 {
     return this->_time;
 }
+
+
+unsigned int Recipe::getRecSetTime()
+{
+	return this->recipeSettingTime;
+}
+
+
+void Recipe::setName(std::string newName)
+{
+	this->_name = newName;
+}
+
+
+void Recipe::setTime(unsigned int newTime)
+{
+	this->_time = newTime;
+}
+
+
+void Recipe::setRecSetTime(unsigned int newRecSetTime)
+{
+	this->recipeSettingTime = newRecSetTime;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 std::istream & operator>> (std::istream & is, Recipe & p)//перегрузка оператора сдвига для потока ввода
 {

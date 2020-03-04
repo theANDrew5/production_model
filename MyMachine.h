@@ -1,5 +1,5 @@
 // This header represents description of Machine clases
-//Machines can process queue simultaneously, step-by-step and using different chambers
+// Machines can process queue simultaneously, step-by-step and using different chambers
 // Class Machines is a base class
 // Class MachinePool represets implementation of simultaneous processing
 // Class MachineFlow represets implementation of step-by-step proc
@@ -8,16 +8,16 @@
 
 
 
-#ifndef _MY_MACHINE_HEADER_
+#ifndef MYMACHINE_HEADER
 
-#define _MY_MACHINE_HEADER_
+#define MYMACHINE_HEADER
 
 
 #include <string>
 #include <list>
 #include "Batch.h"
 #include "Recipe.h"
-#include "Event.h"
+//#include "Event.h"
 #include <vector>
 
 
@@ -31,7 +31,7 @@ public:
 	Machine(); 
 
 	//		Main constructor
-	Machine(int Id, std::string Type, bool state, std::list <Batch*> queue = std::list<Batch*>{});
+	Machine(int Id, std::string Type, bool state, std::list <Batch*> queue = {}, std::vector<Recipe> recipes = {}, const unsigned int bufSize = 1);
 
 	//		Copy constructor
 	Machine( const Machine &ref);
@@ -47,15 +47,19 @@ public:
 
 	void setState(bool newState);
 
+	void setResipes(std::vector<Recipe> newRecipes);
+
 
 	//		Protected Variables Getters
 	int getId();
 
 	std::string getProcType();
 
-	std::list <Batch*> getQueue();
+	std::list<Batch*> getQueue();
 
 	bool getState();
+
+	std::vector<Recipe> getRecipes();
 	
 
 	//		Add new items to queue
@@ -64,8 +68,16 @@ public:
 	//		Indicates if the object contains trivial variables (except Queue)
 	bool isTrivial(); 
 
-	//		
-	Event generateEvent();
+	//		If currentRecipe equels to newResipe Returns true, else - false
+	bool checkCurRecipe(Recipe newRecipe);
+
+	//		Set new current recipe
+	void setNewCurRecipe(Recipe newRecipe);
+
+	//		true if recipe is in set of Machine recipes, else - false
+	bool isRecInMachRecSet(Recipe recipe);
+	//		Generates an Event for Model
+	//Event generateEvent();
 
 
 	//		Virtual destructor
@@ -85,8 +97,20 @@ protected:
 	//		Indicates if Machine is broken
 	bool state; 
 
+	//		Recipes that could be processed by Machine
+	std::vector<Recipe> recipes;
+
+	//		The recipe executing at machine
+	Recipe currentRecipe;
+
+	//		Maximum amount of batches that could be proceed per working cicle
+	const unsigned int bufferSize;
+
+	//		Indicates if current recipe is changed
+	bool recipeChanged;
+
 };
 
 
 
-#endif // !MyMachineClass
+#endif // _MY_MACHINE_HEADER_
