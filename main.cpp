@@ -1,7 +1,6 @@
 #include <iostream>
 #include <algorithm>
-#include "Machine.h"
-#include "Event.h"
+#include "Environment.h"
 
 int main() {
 
@@ -13,10 +12,11 @@ int main() {
                                  Batch ("btc3",15,r1_d)};
     std::list <std::reference_wrapper<Batch>> lst_bat_ptr;
 
-    M_flow mch;
-    Machine& mch_ptr=mch;
-    Batch & b_ptr = lst_bat.front();
-    Event ev(mch_ptr,b_ptr,1000);
+
+    Environment ev;
+    std::cin >>ev;
+    std::cout<<ev;
+
 
 
     return 0;

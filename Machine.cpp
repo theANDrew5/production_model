@@ -27,7 +27,10 @@ Machine::~Machine() = default;
 
 
 //конструкторы и деструктор класса потоковой обработки
-M_flow::M_flow() {}
+M_flow::M_flow()
+{
+    _type="flow";
+}
 
 M_flow::M_flow(std::string name, std::deque <Recipe> recipes, bool state):
         Machine(name,recipes,state)
@@ -122,7 +125,7 @@ std::ostream &operator<<(std::ostream & os, Machine &p)//перегрузка о
     for(Recipe n:p._recipes) os<<n<<' ';
     os<<'\n';
     for(Batch n:p._bathces) os<<n.get_name()<<' ';
-    os<<'\n';
+    //os<<'\n';
     return os;
 }
 

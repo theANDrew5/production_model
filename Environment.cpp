@@ -21,7 +21,9 @@ void read_machines(std::istream & is, Machine &ptr_m, Environment &ptr_e)
     {
         std::string bt_name;
         is>>bt_name;
-        std::_List_iterator<Batch> it_b=std::find_if(ptr_e._batches.begin(), ptr_e._batches.end(), [bt_name](Batch b){ return bt_name==b.get_name() ;});//
+        std::_List_iterator<Batch> it_b=
+                std::find_if(ptr_e._batches.begin(), ptr_e._batches.end(),
+                        [bt_name](Batch b){ return bt_name==b.get_name() ;});//
         ptr_m._bathces.push_back(*it_b);
     }
     //return is;
@@ -57,8 +59,8 @@ std::istream & operator>> (std::istream & is, Environment & p)
         buf_str>>buf;
         p._batches.push_back(buf);
     }
-    is.get();//потому что >> не читает /n
-    while (is.peek()!='\n')//читаем машины
+    //
+    while (is.peek()!='#')//читаем машины
     {
         std::string buf_string;
         is>>buf_string;
@@ -72,16 +74,36 @@ std::istream & operator>> (std::istream & is, Environment & p)
         buf_str.str(buf_string);
         buf_str>>p._machines.back();
          */
-        read_machines(is,p._machines.back(),p);
+        Machine& tmp_lnk=p._machines.back();
+        read_machines(is,tmp_lnk,p);
         is.get();//потому что >> не читает /n
-        while (is.peek()!='\n')
-        {
-            p.read_ev(is);
-        }
-        return is;
+    }
+    is.get();//потому что >> не читает /n
+    while (is.peek()!='\n')//читаем события
+    {
+        p.read_ev(is);
     }
     return is;
+
+    return is;
 }
+
+std::ostream &operator<<(std::ostream &os, Environment &p)
+{
+    os<<p._name<<'\n';
+   for (Batch n:p._batches) os<<n<<'\t';
+   os<<'\n';
+   for (std::reference_wrapper<Machine> n:p._machines) os<<n<<'\n';
+   os<<"#\n";
+   for (Event n:p._envents) os<<n<<' ';
+   os<<'\n';
+
+
+    return os;
+}
+
+Environment::Environment() {}
+
 
 
 
