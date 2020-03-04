@@ -10,14 +10,14 @@ void read_machines(std::istream & is, Machine &ptr_m, Environment &ptr_e)
     is>>ptr_m._name;
     is>>ptr_m._state;
     is.get();//потому что >> не читает /n и его захватывает getline
-    while (is.peek()!='\n')//читаем рецепты
+    while (is.peek()!='\t')//читаем рецепты
     {
         Recipe buf;
         is >> buf;
         ptr_m._recipes.push_back(buf);
     }
     is.get();//потому что >> не читает /n
-    while (is.peek()!='\n')//читаем имена партий
+    while (is.peek()!='\t')//читаем имена партий
     {
         std::string bt_name;
         is>>bt_name;
@@ -26,6 +26,7 @@ void read_machines(std::istream & is, Machine &ptr_m, Environment &ptr_e)
                         [bt_name](Batch b){ return bt_name==b.get_name() ;});//
         ptr_m._bathces.push_back(*it_b);
     }
+    is.get();//потому что >> не читает /n
     //return is;
 }
 
@@ -48,7 +49,7 @@ void Environment::read_ev(std::istream &is)
 std::istream & operator>> (std::istream & is, Environment & p)
 {
     is>>p._name;
-    is.get();//потому что >> не читает /n и его захватывает getline
+    is.get();//потому что >> не читает /n
     while (is.peek()!='\n')//читаем партии
     {
         std::stringstream buf_str;
@@ -59,24 +60,17 @@ std::istream & operator>> (std::istream & is, Environment & p)
         buf_str>>buf;
         p._batches.push_back(buf);
     }
-    //
-    while (is.peek()!='#')//читаем машины
+    is.get();//
+    while (is.peek()!='\n')//читаем машины
     {
         std::string buf_string;
         is>>buf_string;
         Machine *ptr;
         if (buf_string=="flow") ptr = new M_flow();//здесь вставить остальные условия
         p._machines.push_back(*ptr);
-        /*
-        buf_string.clear();
-        std::stringstream buf_str;
-        std::getline(is,buf_string,'\t');
-        buf_str.str(buf_string);
-        buf_str>>p._machines.back();
-         */
         Machine& tmp_lnk=p._machines.back();
         read_machines(is,tmp_lnk,p);
-        is.get();//потому что >> не читает /n
+        //
     }
     is.get();//потому что >> не читает /n
     while (is.peek()!='\n')//читаем события
@@ -93,8 +87,8 @@ std::ostream &operator<<(std::ostream &os, Environment &p)
     os<<p._name<<'\n';
    for (Batch n:p._batches) os<<n<<'\t';
    os<<'\n';
-   for (std::reference_wrapper<Machine> n:p._machines) os<<n<<'\n';
-   os<<"#\n";
+   for (std::reference_wrapper<Machine> n:p._machines) os<<n<<'\t';
+   os<<'\n';
    for (Event n:p._envents) os<<n<<' ';
    os<<'\n';
 

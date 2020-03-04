@@ -119,13 +119,13 @@ std::istream &operator>>(std::istream &is, Machine &p) {
 
 std::ostream &operator<<(std::ostream & os, Machine &p)//перегрузка оператора сдвига для вывода
 {
-    os<<p._type<<'\n';
-    os<<p._name<<'\n';
-    os<<p._state<<'\n';
+    os<<p._type<<' ';
+    os<<p._name<<' ';
+    os<<p._state<<' ';
     for(Recipe n:p._recipes) os<<n<<' ';
-    os<<'\n';
+    os<<'\t';
     for(Batch n:p._bathces) os<<n.get_name()<<' ';
-    //os<<'\n';
+    os<<'\t';
     return os;
 }
 
