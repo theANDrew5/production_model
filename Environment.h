@@ -19,17 +19,19 @@
 class Environment {
 public:
     Environment();
+    Environment(std::istream &is);
 
     friend std::istream & operator>> (std::istream & is, Environment & p);//перегрузка оператора сдвига для потока ввода
     friend std::ostream & operator<< (std::ostream & os, Environment & p);//перегрузка оператора <<
 
+    void make_events();
 private:
     std::string _name;//имя среды
     std::list <Batch> _batches;//партии
     std::list <std::reference_wrapper<Machine>> _machines;//вектор машин
     std::list <Event> _envents;//вектор событий, по которому происходят шаги
     unsigned int _global_model_time;
-    std::ifstream _is_state_file;//входной файл состояния, чтобы создать среду
+    std::istream * _is_state_file;//входной файл состояния, чтобы создать среду
     std::ofstream _os_state_file;//выходной файл состояния, чтобы среду сохранить
     std::ofstream _log_file;//последовательность ивентов
 

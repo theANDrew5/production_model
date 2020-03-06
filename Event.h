@@ -12,23 +12,20 @@
 
 class Environment;//для функции read_machines
 
-
+//интерфейс
 class Event
 {
 public:
-    Event();
-    Event(Machine &m_p, Batch& b_p, unsigned int time);
-    Event(Event const  &p);
 
-    friend std::ostream &operator<<(std::ostream & os, Event & p);//перегрузка оператора сдвига для вывода
+Event(Machine& m_ptr, unsigned int time);
+
+friend std::ostream &operator<<(std::ostream & os, Event & p);
 
 private:
-    Machine& _m_ptr;
-    Batch& _b_ptr;
+    Machine* _m_ptr;
     unsigned int _time;//длительность события
-
-    //friend void read_ev(std::istream & is, Event &ptr_ev, Environment &ptr_e);
 };
+
 
 
 #endif //MODEL_EVENT_H

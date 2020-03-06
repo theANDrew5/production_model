@@ -5,11 +5,6 @@
 #include "Machine.h"
 #include <algorithm>
 
-//коструктор Mch_event
-Mch_ev::Mch_ev(Batch &p, unsigned int t):_b_ptr(p),_time(t){}
-Mch_ev::Mch_ev(Mch_ev &p):_b_ptr(p._b_ptr),_time(p._time) {}
-
-
 //конструкторы и деструктор интерфейса
 Machine::Machine() {}
 
@@ -52,8 +47,8 @@ M_flow::M_flow(const M_flow &p):Machine(p)
 M_flow::~M_flow() = default;
 
 
-//Метод выполняет рассчёт последовательности по порядку
-Mch_ev M_flow::push_ev()
+//Метод выполняет рассчёт события в очереди
+unsigned int M_flow::push_ev()
 {
     if (!_bathces.empty())
     {
@@ -62,7 +57,7 @@ Mch_ev M_flow::push_ev()
         if(std::any_of(_recipes.begin(),_recipes.end(),[rcp](Recipe const r){return rcp==r;}))
         //проверка рецептов
         {
-            return  Mch_ev(it,rcp.get_time()*it.get_count()); //OK
+            return  (rcp.get_time()*it.get_count()); //OK
         }
         else throw (it);//ошибка в очереди партия с неверным рецептом
     }

@@ -16,17 +16,6 @@
 
 
 class Environment;//для функции read_machines
-//временный класс события передаваяемый в Event
-class Mch_ev
-{
-public:
-    Mch_ev();
-    Mch_ev(Batch& p, unsigned int t);
-    Mch_ev(Mch_ev &p);
-    Batch& _b_ptr;
-    unsigned int _time;
-};
-
 
 //Класс интерфейс
 
@@ -41,7 +30,7 @@ public:
     Machine(const Machine & p);//конструктор копирования
     ~Machine();//деструктор
 
-    virtual Mch_ev push_ev()=0;//метод возвращает время события
+    virtual unsigned int push_ev()=0;//метод возвращает время события
     virtual void execute() =0;//метод выполняет событие
     virtual  std::string get_name()=0;
 
@@ -68,7 +57,7 @@ public:
            std::deque <Recipe> recipes, bool state);
     M_flow(const M_flow & p);
 
-    Mch_ev push_ev();//метод возвращает время события
+    unsigned int push_ev();//метод возвращает время события
     void execute();//метод выполняет событие
     virtual  std::string get_name();
     ~M_flow();

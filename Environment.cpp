@@ -38,12 +38,12 @@ void Environment::read_ev(std::istream &is)
     std::_List_iterator<std::reference_wrapper<Machine>> it_mch =
             std::find_if(this->_machines.begin(), this->_machines.end(),
                     [buf_string](Machine &mch){ return buf_string==mch.get_name();});//
-    buf_string.clear();
+    /*buf_string.clear();
     is>>buf_string;
-    std::_List_iterator<Batch> it_b = std::find_if(this->_batches.begin(), this->_batches.end(), [buf_string](Batch b){ return buf_string == b.get_name();});//
+    std::_List_iterator<Batch> it_b = std::find_if(this->_batches.begin(), this->_batches.end(), [buf_string](Batch b){ return buf_string == b.get_name();});*/
     unsigned int time;
     is>>time;
-    this->_envents.emplace_back(*it_mch,*it_b,time);
+    this->_envents.emplace_back(*it_mch,time);
 }
 
 std::istream & operator>> (std::istream & is, Environment & p)
@@ -68,8 +68,7 @@ std::istream & operator>> (std::istream & is, Environment & p)
         Machine *ptr;
         if (buf_string=="flow") ptr = new M_flow();//здесь вставить остальные условия
         p._machines.push_back(*ptr);
-        Machine& tmp_lnk=p._machines.back();
-        read_machines(is,tmp_lnk,p);
+        read_machines(is,*ptr,p);
         //
     }
     is.get();//потому что >> не читает /n
@@ -77,8 +76,6 @@ std::istream & operator>> (std::istream & is, Environment & p)
     {
         p.read_ev(is);
     }
-    return is;
-
     return is;
 }
 
@@ -96,7 +93,24 @@ std::ostream &operator<<(std::ostream &os, Environment &p)
     return os;
 }
 
-Environment::Environment() {}
+
+
+Environment::Environment(std::istream &is):_is_state_file(&is)
+{
+    *_is_state_file>>*this;
+    _global_model_time=0;
+}
+
+Environment::Environment()
+{
+    _global_model_time=0;
+}
+
+void Environment::make_events()
+{
+   // for(Machine& n:this->_machines)
+}
+
 
 
 
