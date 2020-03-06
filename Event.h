@@ -20,7 +20,8 @@ public:
 Event(Machine& m_ptr, unsigned int time);
 
 friend std::ostream &operator<<(std::ostream & os, Event & p);
-
+friend bool operator<(Event& r_ev, Event& l_ev);
+friend bool operator>(Event& r_ev, Event& l_ev);
 private:
     Machine* _m_ptr;
     unsigned int _time;//длительность события

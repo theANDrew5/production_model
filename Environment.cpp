@@ -43,7 +43,7 @@ void Environment::read_ev(std::istream &is)
     std::_List_iterator<Batch> it_b = std::find_if(this->_batches.begin(), this->_batches.end(), [buf_string](Batch b){ return buf_string == b.get_name();});*/
     unsigned int time;
     is>>time;
-    this->_envents.emplace_back(*it_mch,time);
+    this->_events.emplace_back(*it_mch,time);
 }
 
 std::istream & operator>> (std::istream & is, Environment & p)
@@ -86,7 +86,7 @@ std::ostream &operator<<(std::ostream &os, Environment &p)
    os<<'\n';
    for (std::reference_wrapper<Machine> n:p._machines) os<<n<<'\t';
    os<<'\n';
-   for (Event n:p._envents) os<<n<<' ';
+   for (Event n:p._events) os<<n<<' ';
    os<<'\n';
 
 
@@ -106,9 +106,38 @@ Environment::Environment()
     _global_model_time=0;
 }
 
+//метод рассчёта событий
 void Environment::make_events()
 {
-   // for(Machine& n:this->_machines)
+    for(Machine& mch:this->_machines)
+    {
+        try
+        {
+            this->_events.emplace_back(mch,mch.push_ev());
+        }
+        catch (Batch* bt_ptr)
+        {
+            if (bt_ptr!= nullptr) {
+                std::cout << "Batch with wrong recipe!\n\tMachine: " << mch.get_name()
+
+                          << "\n\tBatch: " << bt_ptr->get_name() << '\n';
+                throw (-1);//рассчёт событий прерван
+            }
+            else
+                std::cout<<"Queue is empty!\n\tMachine: "<<mch.get_name()<<'\n';
+        }
+        //сортируем
+        Event& last=this->_events.back();
+        for (auto ev=this->_events.begin();ev!=--(this->_events.end());ev++)
+        {
+            if (*ev>this->_events.back())
+            {
+                this->_events.insert(ev, this->_events.back());
+                this->_events.pop_back();
+                break;
+            }
+        }
+    }
 }
 
 

@@ -59,7 +59,7 @@ unsigned int M_flow::push_ev()
         {
             return  (rcp.get_time()*it.get_count()); //OK
         }
-        else throw (it);//ошибка в очереди партия с неверным рецептом
+        else throw (&it);//ошибка в очереди партия с неверным рецептом
     }
     else
     {

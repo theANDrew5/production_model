@@ -14,6 +14,8 @@ int main() {
 
 
     Environment ev(std::cin);
+    std::cout<<ev<<'\n';
+    ev.make_events();
     std::cout<<ev;
 
 

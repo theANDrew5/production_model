@@ -18,3 +18,12 @@ std::ostream &operator<<(std::ostream & os, Event & p)//перегрузка о�
 }
 
 Event::Event(Machine &m_ptr, unsigned int time):_m_ptr(&m_ptr), _time(time) {}
+
+bool operator<(Event& r_ev, Event& l_ev)
+{
+    return r_ev._time<l_ev._time;
+}
+
+bool operator>(Event &r_ev, Event &l_ev) {
+    return r_ev._time>l_ev._time;;
+}
