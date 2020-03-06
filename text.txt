@@ -1,0 +1,17 @@
+flow
+mch1
+1
+btc1 10 r1 1000 r2 10 r3 20 r4 500 r5 150       btc2 5 r1 1000 r2 10 r3 20 r4 500 r5 150        btc3 15 r1 1000 r2 10 r3 20 r4 500 r5 150	
+r1 1000 r2 10 r3 20 r4 500 r5 150
+10000 5000 15000
+
+flow
+mch1
+1
+btc1 btc2 btc3
+r1 1000 r2 10 r3 20 r4 500 r5 150
+
+
+env1
+btc1 10 r1 1000 r2 10 r3 20 r4 500 r5 150	btc2 5 r1 1000 r2 10 r3 20 r4 500 r5 150	btc3 15 r1 1000 r2 10 r3 20 r4 500 r5 150	btc4 5 r4 500 r5 150	btc5 5 r4 500 r5 150	btc6 5 r4 500 r5 150
+flow mch1 1 r1 1000 r2 10 r3 20 r4 500 r5 150	btc1 btc2 btc3	flow mch2 1	r4 500 r5 150	btc4 btc2 btc3	flow mch3 1 r2 10 r3 20	
