@@ -19,6 +19,8 @@ public:
 
 Event(Machine& m_ptr, unsigned int time);
 
+unsigned int get_time();
+
 friend std::ostream &operator<<(std::ostream & os, Event & p);
 friend bool operator<(Event& r_ev, Event& l_ev);
 friend bool operator>(Event& r_ev, Event& l_ev);

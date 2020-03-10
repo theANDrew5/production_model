@@ -37,10 +37,7 @@ void Environment::read_ev(std::istream &is)
     is>>buf_string;
     std::_List_iterator<std::reference_wrapper<Machine>> it_mch =
             std::find_if(this->_machines.begin(), this->_machines.end(),
-                    [buf_string](Machine &mch){ return buf_string==mch.get_name();});//
-    /*buf_string.clear();
-    is>>buf_string;
-    std::_List_iterator<Batch> it_b = std::find_if(this->_batches.begin(), this->_batches.end(), [buf_string](Batch b){ return buf_string == b.get_name();});*/
+                    [buf_string](Machine &mch){ return buf_string==mch.get_name();});
     unsigned int time;
     is>>time;
     this->_events.emplace_back(*it_mch,time);
@@ -137,6 +134,7 @@ void Environment::make_events()
                 break;
             }
         }
+
     }
 }
 

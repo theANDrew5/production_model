@@ -27,3 +27,8 @@ bool operator<(Event& r_ev, Event& l_ev)
 bool operator>(Event &r_ev, Event &l_ev) {
     return r_ev._time>l_ev._time;;
 }
+
+unsigned int Event::get_time()
+{
+    return this->_time;
+}
