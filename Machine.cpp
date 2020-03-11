@@ -71,15 +71,18 @@ unsigned int M_flow::push_ev()
     }
  }
 
-void M_flow::execute()//выполнение события, просто удаляем ссылку на партию
+void M_flow::execute(std::ostream *log)//выполнение события, просто удаляем ссылку на партию
 {
 
     Batch* bt_ptr=this->_bathces.front();
     if (this->_last_resipe!=bt_ptr->get_first())
     {
+        *log<<"Change recipe\nMachine ID:\t"<< this->_ID<<"\ttime:\t"<< this->_time<<'\n';
         _last_resipe=bt_ptr->get_first();
         //вставить вывод в лог
     }
+    *log<<"Execute batch\nMachine ID:\t"<< this->_ID<<"\tBatch ID:\t"<<bt_ptr->get_first().get_ID()
+    <<"\ttime:\t"<< this->_time<<'\n';
     bt_ptr->execute();
     this->_bathces.pop_front();
 }

@@ -40,7 +40,7 @@ Machine *Event::get_ptr()
     return this->_m_ptr;
 }
 
-void Event::execute()
+void Event::execute(std::ostream *log)
 {
-    this->_m_ptr->execute();
+    this->_m_ptr->execute(log);
 }
