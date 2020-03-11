@@ -6,17 +6,25 @@
 #include <algorithm>
 
 //конструкторы и деструктор интерфейса
-Machine::Machine() {}
-
+Machine::Machine() {_last_resipe= Recipe ();}
+/*
 Machine::Machine(std::string name, std::deque<Recipe> recipes, bool state):
-_name(name), _recipes(recipes), _state(state){}
+_name(name), _recipes(recipes), _state(state){_last_resipe= Recipe (" ", 0);;}
 
 Machine::Machine(std::string name,
-                 std::list <std::reference_wrapper<Batch>> batches,std::deque <Recipe> recipes, bool state):
-_name(name), _bathces(batches),_recipes(recipes), _state(state){}
+                 std::list <Batch*> batches,std::deque <Recipe> recipes, bool state):
+_name(name), _bathces(batches),_recipes(recipes), _state(state){_last_resipe= Recipe (" ", 0);;}
+*/
+
+Machine::Machine(int ID,std::deque<Recipe> recipes, std::list<Batch*> batches, bool state, unsigned int time):
+_ID(ID),_recipes(recipes),_bathces(batches), _state(state),_time(time)
+{
+    _last_resipe=Recipe ();
+}
 
 Machine::Machine(const Machine &p):
-_name(p._name), _bathces(p._bathces),_recipes(p._recipes), _state(p._state) {}
+_ID(p._ID), _bathces(p._bathces),_recipes(p._recipes), _state(p._state),_time(p._time)
+{_last_resipe= Recipe ();}
 
 Machine::~Machine() = default;
 
@@ -27,14 +35,8 @@ M_flow::M_flow()
     _type="flow";
 }
 
-M_flow::M_flow(std::string name, std::deque <Recipe> recipes, bool state):
-        Machine(name,recipes,state)
-{
-    _type="flow";
-}
-
-M_flow::M_flow(std::string name, std::list<std::reference_wrapper<Batch>> batches, std::deque<Recipe> recipes, bool state):
-        Machine(name, batches, recipes, state)
+M_flow::M_flow(int ID,std::deque<Recipe> recipes, std::list<Batch*> batches, bool state):
+        Machine(ID,recipes, batches, state)
 {
     _type="flow";
 }
@@ -52,14 +54,15 @@ unsigned int M_flow::push_ev()
 {
     if (!_bathces.empty())
     {
-        Batch &it=_bathces.front();
-        Recipe &rcp = it.get_first();
+        Batch *it=_bathces.front();
+        Recipe &rcp = it->get_first();
         if(std::any_of(_recipes.begin(),_recipes.end(),[rcp](Recipe const r){return rcp==r;}))
         //проверка рецептов
         {
-            return  (rcp.get_time()*it.get_count()); //OK
+            return  ((this->_last_resipe==it->get_first())?
+            rcp.get_time()*it->get_count():rcp.get_time()*it->get_count()+this->_time ); //OK
         }
-        else throw (&it);//ошибка в очереди партия с неверным рецептом
+        else throw (it);//ошибка в очереди партия с неверным рецептом
     }
     else
     {
@@ -70,12 +73,20 @@ unsigned int M_flow::push_ev()
 
 void M_flow::execute()//выполнение события, просто удаляем ссылку на партию
 {
+
+    Batch* bt_ptr=this->_bathces.front();
+    if (this->_last_resipe!=bt_ptr->get_first())
+    {
+        _last_resipe=bt_ptr->get_first();
+        //вставить вывод в лог
+    }
+    bt_ptr->execute();
     this->_bathces.pop_front();
 }
 
-std::string M_flow::get_name()
+unsigned int M_flow::get_ID()
 {
-    return this->_name;
+    return this->_ID;
 }
 
 /*
@@ -115,14 +126,15 @@ std::istream &operator>>(std::istream &is, Machine &p) {
 std::ostream &operator<<(std::ostream & os, Machine &p)//перегрузка оператора сдвига для вывода
 {
     os<<p._type<<' ';
-    os<<p._name<<' ';
+    os<<p._ID<<' ';
     os<<p._state<<' ';
     for(Recipe n:p._recipes) os<<n<<' ';
     os<<'\t';
-    for(Batch n:p._bathces) os<<n.get_name()<<' ';
+    for(Batch* n:p._bathces) os<<n->get_ID()<<' ';
     os<<'\t';
     return os;
 }
+
 
 
 

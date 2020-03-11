@@ -3,10 +3,9 @@
 //
 
 #include "Batch.h"
-Batch::Batch() {}
-Batch::Batch(std::string name,
-        unsigned int count, std::deque<Recipe> recipes):_name(name),_count(count),_recipes(recipes) {}
-Batch::Batch(const Batch &p): _name(p._name), _count(p._count),_recipes(p._recipes) {}
+Batch::Batch(unsigned int ID,
+        unsigned int count, std::deque<Recipe> recipes):_ID(ID),_count(count),_recipes(recipes) {}
+Batch::Batch(const Batch &p): _ID(p._ID), _count(p._count),_recipes(p._recipes) {}
 
 Recipe & Batch::get_first() {
      Recipe &t= this->_recipes.front();
@@ -19,7 +18,7 @@ const unsigned int Batch::get_count() {
 
 std::istream & operator>> (std::istream & is, Batch & p)//перегрузка оператора сдвига для потока ввода
 {
-    is>>p._name;
+    is>>p._ID;
     is>>p._count;
     while (is.peek()!=-1)
     {
@@ -33,11 +32,16 @@ std::istream & operator>> (std::istream & is, Batch & p)//перегрузка �
 
 std::ostream &operator<<(std::ostream & os, Batch & p)//перегрузка оператора сдвига для вывода
 {
-    os<<p._name<<' '<<p._count;
+    os<<p._ID<<' '<<p._count;
     for (Recipe n:p._recipes) os<<' '<<n;
     return os;
 }
 
-std::string Batch::get_name() {
-    return this->_name;
+unsigned int Batch::get_ID() {
+    return this->_ID;
+}
+
+void Batch::execute()
+{
+    this->_recipes.pop_front();
 }

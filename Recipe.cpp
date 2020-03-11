@@ -3,16 +3,12 @@
 //
 
 #include "Recipe.h"
-Recipe::Recipe()
-{
+Recipe::Recipe(unsigned int ID, unsigned int time):_ID(ID),_time(time) {}
+Recipe::Recipe(const Recipe & p): _ID(p._ID), _time(p._time) {}
 
-}
-Recipe::Recipe(std::string name, unsigned int time):_name(name),_time(time) {}
-Recipe::Recipe(const Recipe & p): _name(p._name), _time(p._time) {}
-
-std::string Recipe::get_name()
+unsigned int Recipe::get_ID()
 {
-    return this->_name;
+    return this->_ID;
 }
 
 unsigned int Recipe::get_time()
@@ -22,32 +18,28 @@ unsigned int Recipe::get_time()
 
 std::istream & operator>> (std::istream & is, Recipe & p)//перегрузка оператора сдвига для потока ввода
 {
-    is>>p._name>>p._time;
-    return is;
-}
-std::ostream &operator<<(std::ostream & os, Recipe & p)//перегрузка оператора сдвига для вывода
-{
-    return os<<p._name<<' '<<p._time;
-}
-/*
-std::istream & Recipe::operator>>(std::istream &is)
-{
-is>>this->_name>>this->_time;
+    is>>p._ID>>p._time;
     return is;
 }
 
-std::ostream & Recipe::operator<<(std::ostream &os)
+std::ostream &operator<<(std::ostream & os, Recipe & p)//перегрузка оператора сдвига для вывода
 {
-os<<this->_name<<' '<< this->_time<<'\n';
-    return os;
-}*/
+    return os<<p._ID<<' '<<p._time;
+}
+
 bool operator==(Recipe &left, Recipe &right)
 {
-    if(left._name==right._name && left._time==right._time) return true;
+    if(left._ID==right._ID && left._time==right._time) return true;
     else return false;
 }
+
 bool operator==(const Recipe &left, const Recipe &right)
 {
-    if(left._name==right._name && left._time==right._time) return true;
+    if(left._ID==right._ID && left._time==right._time) return true;
+    else return false;
+}
+
+bool operator!=(Recipe &left, Recipe &right) {
+    if(left._ID!=right._ID && left._time!=right._time) return true;
     else return false;
 }
