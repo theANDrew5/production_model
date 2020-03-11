@@ -4,6 +4,13 @@
 
 #include "Event.h"
 
+Event::Event(Machine &m_ptr, unsigned int time):_m_ptr(&m_ptr), _time(time) {}
+
+bool operator<(Event& r_ev, Event& l_ev)
+{
+    return r_ev._time<l_ev._time;
+}
+
 /*
 std::istream & operator>> (std::istream & is, Event & p)//перегрузка оператора сдвига для потока ввода
 {
@@ -14,15 +21,10 @@ std::istream & operator>> (std::istream & is, Event & p)//перегрузка �
 
 std::ostream &operator<<(std::ostream & os, Event & p)//перегрузка оператора сдвига для вывода
 {
-    return os<<p._m_ptr->get_name()<<' '<<p._time;
+    return os<<p._m_ptr->get_ID()<<' '<<p._time;
 }
 
-Event::Event(Machine &m_ptr, unsigned int time):_m_ptr(&m_ptr), _time(time) {}
 
-bool operator<(Event& r_ev, Event& l_ev)
-{
-    return r_ev._time<l_ev._time;
-}
 
 bool operator>(Event &r_ev, Event &l_ev) {
     return r_ev._time>l_ev._time;;
@@ -31,4 +33,14 @@ bool operator>(Event &r_ev, Event &l_ev) {
 unsigned int Event::get_time()
 {
     return this->_time;
+}
+
+Machine *Event::get_ptr()
+{
+    return this->_m_ptr;
+}
+
+void Event::execute()
+{
+    this->_m_ptr->execute();
 }

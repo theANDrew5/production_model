@@ -7,8 +7,9 @@
 void read_machines(std::istream & is, Machine &ptr_m, Environment &ptr_e)
 {
 
-    is>>ptr_m._name;
+    is>>ptr_m._ID;
     is>>ptr_m._state;
+    is>>ptr_m._time;
     is.get();//потому что >> не читает /n и его захватывает getline
     while (is.peek()!='\t')//читаем рецепты
     {
@@ -19,12 +20,12 @@ void read_machines(std::istream & is, Machine &ptr_m, Environment &ptr_e)
     is.get();//потому что >> не читает /n
     while (is.peek()!='\t')//читаем имена партий
     {
-        std::string bt_name;
-        is>>bt_name;
+        unsigned int bt_ID;
+        is>>bt_ID;
         std::_List_iterator<Batch> it_b=
                 std::find_if(ptr_e._batches.begin(), ptr_e._batches.end(),
-                        [bt_name](Batch b){ return bt_name==b.get_name() ;});//
-        ptr_m._bathces.push_back(*it_b);
+                        [bt_ID](Batch b){ return bt_ID==b.get_ID() ;});//
+        ptr_m._bathces.push_back(&*it_b);
     }
     is.get();//потому что >> не читает /n
     //return is;
@@ -33,11 +34,11 @@ void read_machines(std::istream & is, Machine &ptr_m, Environment &ptr_e)
 
 void Environment::read_ev(std::istream &is)
 {
-    std::string buf_string;
-    is>>buf_string;
+    unsigned int mch_ID;
+    is>> mch_ID;
     std::_List_iterator<std::reference_wrapper<Machine>> it_mch =
             std::find_if(this->_machines.begin(), this->_machines.end(),
-                    [buf_string](Machine &mch){ return buf_string==mch.get_name();});
+                    [ mch_ID](Machine &mch){ return mch_ID==mch.get_ID();});
     unsigned int time;
     is>>time;
     this->_events.emplace_back(*it_mch,time);
@@ -92,15 +93,15 @@ std::ostream &operator<<(std::ostream &os, Environment &p)
 
 
 
-Environment::Environment(std::istream &is):_is_state_file(&is)
-{
-    *_is_state_file>>*this;
-    _global_model_time=0;
-}
-
 Environment::Environment()
 {
     _global_model_time=0;
+}
+
+Environment::Environment(std::istream &is, unsigned int time,std::ostream &os):
+                        _is_state_file(&is),_global_model_time(time),_log_file(&os)
+{
+    *_is_state_file>>*this;
 }
 
 //метод рассчёта событий
@@ -115,13 +116,13 @@ void Environment::make_events()
         catch (Batch* bt_ptr)
         {
             if (bt_ptr!= nullptr) {
-                std::cout << "Batch with wrong recipe!\n\tMachine: " << mch.get_name()
+                *_log_file << "Batch with wrong recipe!\n\tMachine ID: " << mch.get_ID()
 
-                          << "\n\tBatch: " << bt_ptr->get_name() << '\n';
+                          << "\n\tBatch ID: " << bt_ptr->get_ID() << '\n';
                 throw (-1);//рассчёт событий прерван
             }
             else
-                std::cout<<"Queue is empty!\n\tMachine: "<<mch.get_name()<<'\n';
+                *_log_file<<"Queue is empty!\n\tMachine ID: "<<mch.get_ID()<<'\n';
         }
         //сортируем
         Event& last=this->_events.back();
@@ -135,6 +136,17 @@ void Environment::make_events()
             }
         }
 
+    }
+}
+
+void Environment::do_step(unsigned int n)
+{
+    if (n<1) return;
+    auto ev_it=this->_events.begin();
+    for (int i = 0;i<n; ++i)
+    {
+        ev_it->execute();
+        ev_it++;
     }
 }
 
