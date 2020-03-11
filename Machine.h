@@ -64,18 +64,31 @@ public:
 };
 
 
-/*
+
 //наследник обработки группой партий
-class M_group:Machine
+class M_group:public Machine
 {
 public:
-    M_group(std::string name,std::vector <Recipe> recipes, bool state);
-    M_group(std::string name,std::vector <Batch> batches,std::vector <Recipe> recipes, bool state);
-    //M_group(const M_group & p);
+	M_group();
 
-    void execution();
+	M_group(std::string name,std::vector <Recipe> recipes, bool state);
+
+    M_group(std::string name,std::vector <Batch> batches,std::vector <Recipe> recipes, bool state);
+
+    M_group(const M_group & p);
+
+	
+	unsigned int push_ev();
+
+	void execute();
+
+	std::string get_name();
+
+	~M_group();
 };
 
+
+/*
 //наследник обработки пачкой пластин
 class M_stack:Machine
 {
@@ -86,6 +99,6 @@ public:
 
     void execution();
 };
-*/
 
+*/
 #endif //MODEL_MACHINE_H
