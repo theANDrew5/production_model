@@ -22,6 +22,7 @@ Event(Machine& m_ptr, unsigned int time);
 unsigned int get_time();
 Machine* get_ptr();
 void execute(std::ostream *log);
+void time_shift(unsigned int shift);
 
 friend std::ostream &operator<<(std::ostream & os, Event & p);
 friend bool operator<(Event& r_ev, Event& l_ev);

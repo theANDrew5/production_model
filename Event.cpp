@@ -43,4 +43,10 @@ Machine *Event::get_ptr()
 void Event::execute(std::ostream *log)
 {
     this->_m_ptr->execute(log);
+    *log<<"time:\t"<< this->_time<<'\n';
+}
+
+void Event::time_shift(unsigned int shift)
+{
+    this->_time-=shift;
 }

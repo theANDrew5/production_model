@@ -81,8 +81,7 @@ void M_flow::execute(std::ostream *log)//выполнение события, п
         _last_resipe=bt_ptr->get_first();
         //вставить вывод в лог
     }
-    *log<<"Execute batch\nMachine ID:\t"<< this->_ID<<"\tBatch ID:\t"<<bt_ptr->get_first().get_ID()
-    <<"\ttime:\t"<< this->_time<<'\n';
+    *log<<"Execute batch\nMachine ID:\t"<< this->_ID<<"\tBatch ID:\t"<<bt_ptr->get_first().get_ID()<<'\t';
     bt_ptr->execute();
     this->_bathces.pop_front();
 }

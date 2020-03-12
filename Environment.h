@@ -19,7 +19,7 @@
 class Environment {
 public:
     Environment();
-    Environment(std::istream &is, unsigned int time=0,std::ostream &os=std::cout);
+    Environment(std::istream &is, std::ostream &os=std::cout,unsigned int time=0);
 
     friend std::istream & operator>> (std::istream & is, Environment & p);//перегрузка оператора сдвига для потока ввода
     friend std::ostream & operator<< (std::ostream & os, Environment & p);//перегрузка оператора <<

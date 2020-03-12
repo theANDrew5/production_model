@@ -4,6 +4,8 @@
 
 #include "Environment.h"
 
+static const bool DEBUG=true;
+
 void read_machines(std::istream & is, Machine &ptr_m, Environment &ptr_e)
 {
 
@@ -74,6 +76,7 @@ std::istream & operator>> (std::istream & is, Environment & p)
     {
         p.read_ev(is);
     }
+    p.make_events();
     return is;
 }
 
@@ -98,7 +101,7 @@ Environment::Environment()
     _global_model_time=0;
 }
 
-Environment::Environment(std::istream &is, unsigned int time,std::ostream &os):
+Environment::Environment(std::istream &is, std::ostream &os,unsigned int time):
                         _is_state_file(&is),_global_model_time(time),_log_file(&os)
 {
     *_is_state_file>>*this;
@@ -137,6 +140,12 @@ void Environment::make_events()
         }
 
     }
+    if(DEBUG)
+    {
+        for (auto n:this->_events) std::cout<<n<<'\t';
+        std::cout<<'\n';
+    }
+
 }
 
 void Environment::do_step(unsigned int n)
@@ -145,8 +154,17 @@ void Environment::do_step(unsigned int n)
     auto ev_it=this->_events.begin();
     for (int i = 0;i<n; ++i)
     {
+        *this->_log_file<<"MODEL TIME:\t"<<this->_global_model_time<<'\n';
+        this->_global_model_time+=ev_it->get_time();
+        auto ev_it_f=ev_it;
+        ++ev_it_f;
+        for (ev_it_f;ev_it_f!=this->_events.end()--;ev_it_f++)
+        {
+            ev_it_f->time_shift(ev_it->get_time());
+        }
         ev_it->execute(this->_log_file);
         ev_it++;
+        this->_events.pop_front();
     }
 }
 
