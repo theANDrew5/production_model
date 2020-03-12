@@ -64,20 +64,24 @@ public:
 class M_group:public Machine
 {
 public:
+	
+	//		Defualt constructor
 	M_group();
 
-	M_group(std::string name,std::vector <Recipe> recipes, bool state);
+	//		Main constructor
+	M_group(int ID, std::deque<Recipe> recipes, std::list<Batch*> batches = {}, bool state = true, unsigned int time = 0);
 
-    M_group(std::string name,std::vector <Batch> batches,std::vector <Recipe> recipes, bool state);
+	//		Copy constructor
+	M_group(const M_group &p);
 
-    M_group(const M_group & p);
-
-	
+	//		Returns time of even execution on this machine
 	unsigned int push_ev();
 
+	//		execute an event on this machine
 	void execute();
-
-	std::string get_name();
+	
+	//		return an ID of machine
+	unsigned int get_ID();
 
 	~M_group();
 };
