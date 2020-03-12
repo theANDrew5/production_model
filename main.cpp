@@ -23,6 +23,10 @@ int main() {
     std::cout<<ev<<'\n';
     ev.make_events();
     std::cout<<ev;
+    ev.do_step(2);
+    ev.make_events();
+    //ev.do_step()
+    std::cout<<ev;
 
 
 

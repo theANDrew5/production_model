@@ -28,7 +28,7 @@ public:
     virtual ~Machine();//деструктор
 
     virtual unsigned int push_ev()=0;//метод возвращает время события
-    virtual void execute() =0;//метод выполняет событие
+    virtual void execute(std::ostream *log) =0;//метод выполняет событие
     virtual unsigned int get_ID()=0;
 
 protected:
@@ -53,7 +53,7 @@ public:
     M_flow(const M_flow & p);
 
     unsigned int push_ev();//метод возвращает время события
-    void execute();//метод выполняет событие
+    void execute(std::ostream *log);//метод выполняет событие
     unsigned int get_ID();
     ~M_flow();
 };

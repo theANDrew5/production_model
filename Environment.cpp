@@ -145,7 +145,7 @@ void Environment::do_step(unsigned int n)
     auto ev_it=this->_events.begin();
     for (int i = 0;i<n; ++i)
     {
-        ev_it->execute();
+        ev_it->execute(this->_log_file);
         ev_it++;
     }
 }

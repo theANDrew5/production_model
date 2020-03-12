@@ -21,7 +21,7 @@ Event(Machine& m_ptr, unsigned int time);
 
 unsigned int get_time();
 Machine* get_ptr();
-void execute();
+void execute(std::ostream *log);
 
 friend std::ostream &operator<<(std::ostream & os, Event & p);
 friend bool operator<(Event& r_ev, Event& l_ev);
