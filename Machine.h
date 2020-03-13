@@ -59,18 +59,35 @@ public:
 };
 
 
-/*
+
 //наследник обработки группой партий
-class M_group:Machine
+class M_group:public Machine
 {
 public:
-    M_group(std::string name,std::vector <Recipe> recipes, bool state);
-    M_group(std::string name,std::vector <Batch> batches,std::vector <Recipe> recipes, bool state);
-    //M_group(const M_group & p);
+	
+	//		Defualt constructor
+	M_group();
 
-    void execution();
+	//		Main constructor
+	M_group(int ID, std::deque<Recipe> recipes, std::list<Batch*> batches = {}, bool state = true, unsigned int time = 0);
+
+	//		Copy constructor
+	M_group(const M_group &p);
+
+	//		Returns time of even execution on this machine
+	unsigned int push_ev();
+
+	//		execute an event on this machine
+	void execute();
+	
+	//		return an ID of machine
+	unsigned int get_ID();
+
+	~M_group();
 };
 
+
+/*
 //наследник обработки пачкой пластин
 class M_stack:Machine
 {
@@ -81,6 +98,6 @@ public:
 
     void execution();
 };
-*/
 
+*/
 #endif //MODEL_MACHINE_H
