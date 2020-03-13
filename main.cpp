@@ -9,10 +9,10 @@ int main()
     Environment ev(if_Str,std::cout);
     std::cout<<ev<<'\n';
     ev.do_step(2);
-    ev.make_events();
-    ev.do_step(2);
-    ev.make_events();
-    ev.do_step(2);
+    //ev.make_events();
+    //ev.do_step(2);
+    //ev.make_events();
+   // ev.do_step(2);
     //std::cout<<ev;
 
 

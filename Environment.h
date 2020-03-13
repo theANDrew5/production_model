@@ -24,9 +24,11 @@ public:
     friend std::istream & operator>> (std::istream & is, Environment & p);//перегрузка оператора сдвига для потока ввода
     friend std::ostream & operator<< (std::ostream & os, Environment & p);//перегрузка оператора <<
 
-    void make_events();
+    void push_event(Machine & mch);
     void do_step(unsigned int n);
 private:
+    void make_events();
+
     std::string _name;//имя среды
     std::list <Batch> _batches;//партии
     std::list <std::reference_wrapper<Machine>> _machines;//вектор машин

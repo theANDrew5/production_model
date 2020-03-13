@@ -107,6 +107,39 @@ Environment::Environment(std::istream &is, std::ostream &os,unsigned int time):
     *_is_state_file>>*this;
 }
 
+
+void Environment::push_event(Machine &mch)
+{
+    try
+    {
+        this->_events.emplace_back(mch, mch.push_ev());
+    }
+    catch (Batch* bt_ptr)
+    {
+        if (bt_ptr!= nullptr)
+        {
+            *this->_log_file << "Batch with wrong recipe!\n\tMachine ID: " << mch.get_ID()
+
+                       << "\n\tBatch ID: " << bt_ptr->get_ID() << '\n';
+            throw (-1);//рассчёт событий прерван
+        }
+        else
+            *this->_log_file<<"Queue is empty!\n\tMachine ID: "<<mch.get_ID()<<'\n';
+    }
+    //сортируем
+    Event& last=this->_events.back();
+    for (auto ev=this->_events.begin();ev!=--(this->_events.end());ev++)
+    {
+        if (*ev>this->_events.back())
+        {
+            this->_events.insert(ev, this->_events.back());
+            this->_events.pop_back();
+            break;
+        }
+    }
+}
+
+
 //метод рассчёта событий
 void Environment::make_events()
 {
@@ -114,32 +147,14 @@ void Environment::make_events()
     {
         try
         {
-            this->_events.emplace_back(mch,mch.push_ev());
+            this->push_event(mch);
         }
-        catch (Batch* bt_ptr)
+        catch (int)
         {
-            if (bt_ptr!= nullptr) {
-                *_log_file << "Batch with wrong recipe!\n\tMachine ID: " << mch.get_ID()
-
-                          << "\n\tBatch ID: " << bt_ptr->get_ID() << '\n';
-                throw (-1);//рассчёт событий прерван
-            }
-            else
-                *_log_file<<"Queue is empty!\n\tMachine ID: "<<mch.get_ID()<<'\n';
+            *this->_log_file<<"Modelling stopped!\n";
         }
-        //сортируем
-        Event& last=this->_events.back();
-        for (auto ev=this->_events.begin();ev!=--(this->_events.end());ev++)
-        {
-            if (*ev>this->_events.back())
-            {
-                this->_events.insert(ev, this->_events.back());
-                this->_events.pop_back();
-                break;
-            }
-        }
-
     }
+
     if(DEBUG)
     {
         for (auto n:this->_events) std::cout<<n<<'\t';
@@ -147,6 +162,8 @@ void Environment::make_events()
     }
 
 }
+
+
 
 void Environment::do_step(unsigned int n)
 {
@@ -167,6 +184,9 @@ void Environment::do_step(unsigned int n)
         this->_events.pop_front();
     }
 }
+
+
+
 
 
 
