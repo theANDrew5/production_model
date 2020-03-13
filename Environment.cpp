@@ -165,23 +165,40 @@ void Environment::make_events()
 
 
 
-void Environment::do_step(unsigned int n)
-{
-    if (n<1) return;
-    auto ev_it=this->_events.begin();
-    for (int i = 0;i<n; ++i)
+void Environment::do_step(unsigned int n) {
+    if (n < 1) return;
+    try
     {
-        *this->_log_file<<"MODEL TIME:\t"<<this->_global_model_time<<'\n';
-        this->_global_model_time+=ev_it->get_time();
-        auto ev_it_f=ev_it;
-        ++ev_it_f;
-        for (ev_it_f;ev_it_f!=this->_events.end()--;ev_it_f++)
+        if (this->_events.empty()) throw (-1);
+        auto ev_it = this->_events.begin();
+        for (int i = 0; i < n; ++i)
         {
-            ev_it_f->time_shift(ev_it->get_time());
+
+            *this->_log_file << "MODEL TIME:\t" << this->_global_model_time << '\n';
+            if (this->_events.empty()) throw (i);
+            this->_global_model_time += ev_it->get_time();
+            auto ev_it_f = ev_it;
+            ++ev_it_f;
+            for (ev_it_f; ev_it_f != this->_events.end()--; ev_it_f++) {
+                ev_it_f->time_shift(ev_it->get_time());
+            }
+            ev_it->execute(this->_log_file);
+            ev_it++;
+            this->_events.pop_front();
         }
-        ev_it->execute(this->_log_file);
-        ev_it++;
-        this->_events.pop_front();
+
+    }
+    catch (int err)
+    {
+        switch (err)
+        {
+            case -1:
+                *this->_log_file << "Event vector is empty!\n";
+                break;
+            default:
+                *this->_log_file << "End of event vector reached by step:\t"<<err<<'\n';
+        }
+
     }
 }
 
