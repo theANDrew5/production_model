@@ -38,12 +38,12 @@ void Environment::read_ev(std::istream &is)
 {
     unsigned int mch_ID;
     is>> mch_ID;
-    std::_List_iterator<std::reference_wrapper<Machine>> it_mch =
+    auto it_mch =
             std::find_if(this->_machines.begin(), this->_machines.end(),
-                    [ mch_ID](Machine &mch){ return mch_ID==mch.get_ID();});
+                    [ mch_ID](Machine *mch){ return mch_ID==mch->get_ID();});
     unsigned int time;
     is>>time;
-    this->_events.emplace_back(*it_mch,time);
+    this->_events.emplace_back(**it_mch,time);
 }
 
 std::istream & operator>> (std::istream & is, Environment & p)
@@ -66,8 +66,9 @@ std::istream & operator>> (std::istream & is, Environment & p)
         std::string buf_string;
         is>>buf_string;
         Machine *ptr;
-        if (buf_string=="flow") ptr = new M_flow();//здесь вставить остальные условия
-        p._machines.push_back(*ptr);
+        std::deque<Recipe> recipes;
+        if (buf_string=="flow") ptr = new M_flow;//здесь вставить остальные условия
+        p._machines.push_back(ptr);
         read_machines(is,*ptr,p);
         //
     }
@@ -85,7 +86,7 @@ std::ostream &operator<<(std::ostream &os, Environment &p)
     os<<p._name<<'\n';
    for (Batch n:p._batches) os<<n<<'\t';
    os<<'\n';
-   for (std::reference_wrapper<Machine> n:p._machines) os<<n<<'\t';
+   for (auto n:p._machines) os<<*n<<'\t';
    os<<'\n';
    for (Event n:p._events) os<<n<<' ';
    os<<'\n';
@@ -106,8 +107,29 @@ Environment::Environment(std::istream &is, std::ostream &os,unsigned int time):
 {
     *_is_state_file>>*this;
 }
+/*
+Batch *Environment::search_batch(unsigned int btc_ID)
+{
+    auto n=this->_batches.begin();
+    while (n->get_ID()!=btc_ID)
+    {
+        n++;
+    }
+    return &*n;
+}
 
-
+Machine *Environment::search_machine(unsigned int mch_ID)
+{
+    auto n=this->_machines.begin();
+    Machine *ptr=*n;
+    while (ptr->get_ID()!=mch_ID)
+    {
+        n++;
+        ptr=*n;
+    }
+    return ptr;
+}
+*/
 void Environment::push_event(Machine &mch)
 {
     try
@@ -143,11 +165,11 @@ void Environment::push_event(Machine &mch)
 //метод рассчёта событий
 void Environment::make_events()
 {
-    for(Machine& mch:this->_machines)
+    for(auto mch:this->_machines)
     {
         try
         {
-            this->push_event(mch);
+            this->push_event(*mch);
         }
         catch (int)
         {
@@ -201,6 +223,10 @@ void Environment::do_step(unsigned int n) {
 
     }
 }
+
+
+
+
 
 
 
