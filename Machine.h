@@ -29,7 +29,8 @@ public:
 
     virtual unsigned int push_ev()=0;//метод возвращает время события
     virtual void execute(std::ostream *log) =0;//метод выполняет событие
-    virtual unsigned int get_ID()=0;
+    virtual unsigned int get_ID()=0;//возвращает ID машины
+    virtual void insert_batch(unsigned int pos, Batch* btc)=0;//вставляет партию в очередь
 
 protected:
     std::string _type;//тип обработки
@@ -55,6 +56,7 @@ public:
     unsigned int push_ev();//метод возвращает время события
     void execute(std::ostream *log);//метод выполняет событие
     unsigned int get_ID();
+    void insert_batch(unsigned int pos, Batch* btc);
     ~M_flow();
 };
 

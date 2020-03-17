@@ -91,6 +91,17 @@ unsigned int M_flow::get_ID()
     return this->_ID;
 }
 
+void M_flow::insert_batch(unsigned int pos, Batch* btc)
+{
+    unsigned int n=0;
+    auto btc_pos=this->_bathces.begin();
+    while (n!=pos+1)
+    {
+        btc_pos++;
+    }
+    this->_bathces.insert(btc_pos,btc);
+}
+
 
 
 //========================		M_group class methods	================================
