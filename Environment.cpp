@@ -224,6 +224,13 @@ void Environment::do_step(unsigned int n) {
     }
 }
 
+void Environment::add_batch(unsigned int btc_ID, unsigned int mch_ID, unsigned int pos)
+{
+    Batch* btc=search_batch(btc_ID);
+    Machine* mch=search_machine(mch_ID);
+    mch->insert_batch(btc,pos);
+}
+
 
 
 

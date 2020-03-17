@@ -26,7 +26,7 @@ public:
 
     void push_event(Machine & mch);//вставка события из машины
     void do_step(unsigned int n);//сделать n шагов моделирования
-    //void add_batch(unsigned int btc_ID, unsigned int mch_ID);//вставить в очередь машины партию
+    void add_batch(unsigned int btc_ID, unsigned int mch_ID, unsigned int pos);//вставить в очередь машины партию
 private:
 
     void make_events();//рассчёт массива событий при запуске модели
