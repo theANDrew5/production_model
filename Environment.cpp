@@ -107,7 +107,7 @@ Environment::Environment(std::istream &is, std::ostream &os,unsigned int time):
 {
     *_is_state_file>>*this;
 }
-/*
+
 Batch *Environment::search_batch(unsigned int btc_ID)
 {
     auto n=this->_batches.begin();
@@ -129,7 +129,7 @@ Machine *Environment::search_machine(unsigned int mch_ID)
     }
     return ptr;
 }
-*/
+
 void Environment::push_event(Machine &mch)
 {
     try

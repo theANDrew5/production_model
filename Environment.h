@@ -30,8 +30,8 @@ public:
 private:
 
     void make_events();//рассчёт массива событий при запуске модели
-    //Batch* search_batch(unsigned int btc_ID);//возвращает указатель на партию по её ID
-    //Machine* search_machine(unsigned int mch_ID);//возвращает указатель на машину по её ID
+    Batch* search_batch(unsigned int btc_ID);//возвращает указатель на партию по её ID
+    Machine* search_machine(unsigned int mch_ID);//возвращает указатель на машину по её ID
 
 
     std::string _name;//имя среды
