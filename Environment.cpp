@@ -194,10 +194,9 @@ void Environment::do_step(unsigned int n)
     try
     {
         if (this->_events.empty()) throw (-1);
-        auto ev_it = this->_events.begin();
         for (int i = 0; i < n; ++i)
         {
-
+            auto ev_it = this->_events.begin();
             *this->_log_file << "MODEL TIME:\t" << this->_global_model_time << '\n';
             if (this->_events.empty()) throw (i);
             this->_global_model_time += ev_it->get_time();
@@ -209,9 +208,9 @@ void Environment::do_step(unsigned int n)
             }
             ev_it->execute(this->_log_file);
             Machine * m_ptr=ev_it->get_ptr();
-            this->push_event(*m_ptr);
             ev_it++;
             this->_events.pop_front();
+            this->push_event(*m_ptr);
         }
 
     }
