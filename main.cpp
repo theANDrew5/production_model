@@ -7,9 +7,11 @@ int main()
 
     std::ifstream if_Str ("state.txt");
     Environment ev(if_Str,std::cout);
-    std::cout<<ev<<'\n';
-    ev.do_step(3);
+    //ev.add_batch(2,1,0);
+    //ev.add_batch(1,1,0);
+    //ev.add_batch(3,1,0);
     ev.do_step(2);
+    std::cout<<ev<<'\n';
     //ev.make_events();
     //ev.do_step(2);
     //ev.make_events();

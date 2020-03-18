@@ -24,11 +24,13 @@ public:
     friend std::istream & operator>> (std::istream & is, Environment & p);//перегрузка оператора сдвига для потока ввода
     friend std::ostream & operator<< (std::ostream & os, Environment & p);//перегрузка оператора <<
 
-    void push_event(Machine & mch);//вставка события из машины
+    //вставка события из машины
     void do_step(unsigned int n);//сделать n шагов моделирования
     void add_batch(unsigned int btc_ID, unsigned int mch_ID, unsigned int pos);//вставить в очередь машины партию
+
 private:
 
+    void push_event(Machine & mch);
     void make_events();//рассчёт массива событий при запуске модели
     Batch* search_batch(unsigned int btc_ID);//возвращает указатель на партию по её ID
     Machine* search_machine(unsigned int mch_ID);//возвращает указатель на машину по её ID

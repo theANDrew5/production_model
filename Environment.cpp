@@ -188,7 +188,8 @@ void Environment::make_events()
 
 
 
-void Environment::do_step(unsigned int n) {
+void Environment::do_step(unsigned int n)
+{
     if (n < 1) return;
     try
     {
@@ -202,10 +203,13 @@ void Environment::do_step(unsigned int n) {
             this->_global_model_time += ev_it->get_time();
             auto ev_it_f = ev_it;
             ++ev_it_f;
-            for (ev_it_f; ev_it_f != this->_events.end()--; ev_it_f++) {
+            for (ev_it_f; ev_it_f != this->_events.end()--; ev_it_f++)
+            {
                 ev_it_f->time_shift(ev_it->get_time());
             }
             ev_it->execute(this->_log_file);
+            Machine * m_ptr=ev_it->get_ptr();
+            this->push_event(*m_ptr);
             ev_it++;
             this->_events.pop_front();
         }
@@ -221,7 +225,13 @@ void Environment::do_step(unsigned int n) {
             default:
                 *this->_log_file << "End of event vector reached by step:\t"<<err<<'\n';
         }
+        return;
+    }
 
+    if (DEBUG)
+    {
+        for (auto n:this->_events) std::cout<<n<<'\t';
+        std::cout<<'\n';
     }
 }
 
