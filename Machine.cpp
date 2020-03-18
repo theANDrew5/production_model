@@ -95,9 +95,10 @@ void M_flow::insert_batch(Batch* btc, unsigned int pos)
 {
     unsigned int n=0;
     auto btc_pos=this->_bathces.begin();
-    while (n!=pos+1)
+    while (n!=pos || !this->_bathces.empty())
     {
         btc_pos++;
+        n++;
     }
     this->_bathces.insert(btc_pos,btc);
 }
