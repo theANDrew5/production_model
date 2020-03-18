@@ -147,6 +147,7 @@ void Environment::push_event(Machine &mch)
         }
         else
             *this->_log_file<<"Queue is empty!\n\tMachine ID: "<<mch.get_ID()<<'\n';
+        return;
     }
     //сортируем
     Event& last=this->_events.back();
