@@ -24,7 +24,7 @@ std::istream & operator>> (std::istream & is, Recipe & p)//перегрузка 
 
 std::ostream &operator<<(std::ostream & os, Recipe & p)//перегрузка оператора сдвига для вывода
 {
-    return os<<p._ID<<' '<<p._time;
+    return os<<"ID: "<<p._ID<<"\tTIME: "<<p._time;
 }
 
 bool operator==(Recipe &left, Recipe &right)

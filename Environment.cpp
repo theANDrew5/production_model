@@ -83,12 +83,11 @@ std::istream & operator>> (std::istream & is, Environment & p)
 
 std::ostream &operator<<(std::ostream &os, Environment &p)
 {
-    os<<p._name<<'\n';
-   for (Batch n:p._batches) os<<n<<'\t';
-   os<<'\n';
-   for (auto n:p._machines) os<<*n<<'\t';
-   os<<'\n';
-   for (Event n:p._events) os<<n<<' ';
+    os<<"ENVIRONMENT:\t"<<p._name<<'\n';
+   os<<"BATCHES:\n";
+    for (Batch n:p._batches) os<<n<<'\n';
+   os<<"MACHINES:\n";
+   for (auto n:p._machines) os<<*n<<'\n';
    os<<'\n';
 
 

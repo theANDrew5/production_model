@@ -32,8 +32,8 @@ std::istream & operator>> (std::istream & is, Batch & p)//перегрузка �
 
 std::ostream &operator<<(std::ostream & os, Batch & p)//перегрузка оператора сдвига для вывода
 {
-    os<<p._ID<<' '<<p._count;
-    for (Recipe n:p._recipes) os<<' '<<n;
+    os<<"ID: "<<p._ID<<"\tCOUNT: "<<p._count<<"\tRECIPES:";
+    for (Recipe n:p._recipes) os<<'\t'<<n;
     return os;
 }
 

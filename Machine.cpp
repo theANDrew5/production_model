@@ -7,14 +7,6 @@
 
 //конструкторы и деструктор интерфейса
 Machine::Machine() {_last_resipe= Recipe ();}
-/*
-Machine::Machine(std::string name, std::deque<Recipe> recipes, bool state):
-_name(name), _recipes(recipes), _state(state){_last_resipe= Recipe (" ", 0);;}
-
-Machine::Machine(std::string name,
-                 std::list <Batch*> batches,std::deque <Recipe> recipes, bool state):
-_name(name), _bathces(batches),_recipes(recipes), _state(state){_last_resipe= Recipe (" ", 0);;}
-*/
 
 Machine::Machine(int ID,std::deque<Recipe> recipes, std::list<Batch*> batches, bool state, unsigned int time):
 _ID(ID),_recipes(recipes),_bathces(batches), _state(state),_time(time)
@@ -71,7 +63,7 @@ unsigned int M_flow::push_ev()
     }
  }
 
-void M_flow::execute(std::ostream *log)//выполнение события, просто удаляем ссылку на партию
+void M_flow::execute(std::ostream *log)//выполнение события
 {
 
     Batch* bt_ptr=this->_bathces.front();
@@ -207,13 +199,15 @@ M_group::~M_group()
 
 std::ostream &operator<<(std::ostream & os, Machine &p)//перегрузка оператора сдвига для вывода
 {
-    os<<p._type<<' ';
-    os<<p._ID<<' ';
-    os<<p._state<<' ';
-    for(Recipe n:p._recipes) os<<n<<' ';
-    os<<'\t';
+    os<<"TYPE: "<<p._type;
+    os<<"\tID: "<<p._ID;
+    os<<"\tSTATE:"<<p._state;
+    os<<"\tRECIPES:";
+    for(Recipe n:p._recipes) os<<'\t'<<n;
+    os<<'\n';
+    /*
     for(Batch* n:p._bathces) os<<n->get_ID()<<' ';
-    os<<'\t';
+    os<<'\t';*/
     return os;
 }
 
