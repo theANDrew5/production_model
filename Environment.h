@@ -22,8 +22,8 @@ public:
     Environment();
     Environment(std::istream &is_conf, unsigned int time=0, std::ostream &os_log=std::cout,
                 std::ostream &os_mes=std::cout);
-    Environment(std::istream &is_conf, std::istream &is_state,unsigned int time=0, std::ostream &os_log=std::cout,
-            std::ostream &os_mes=std::cout);
+    Environment(std::istream &is_conf, std::istream &is_state, std::ostream &os_log=std::cout,
+            std::ostream &os_mes=std::cout, unsigned int time=0);
 
 
     friend std::ostream & operator<< (std::ostream & os, Environment & p);//перегрузка оператора <<

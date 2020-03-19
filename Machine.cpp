@@ -69,11 +69,11 @@ void M_flow::execute(std::ostream *log)//выполнение события
     Batch* bt_ptr=this->_batches.front();
     if (this->_last_resipe!=bt_ptr->get_first())
     {
-        *log<<"Change recipe\nMachine ID:\t"<< this->_ID<<"\ttime:\t"<< this->_time<<'\n';
+        *log<<"Change_recipe\tMachine_ID: "<< this->_ID<<"\ttime: "<< this->_time<<'\n';
         _last_resipe=bt_ptr->get_first();
         //вставить вывод в лог
     }
-    *log<<"Execute batch\nMachine ID:\t"<< this->_ID<<"\tBatch ID:\t"<<bt_ptr->get_first().get_ID()<<'\t';
+    *log<<"Execute_batch\tMachine_ID: "<< this->_ID<<"\tBatch_ID: "<<bt_ptr->get_first().get_ID();
     bt_ptr->execute();
     this->_batches.pop_front();
 }
