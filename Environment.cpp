@@ -258,6 +258,22 @@ void Environment::do_step_till_machine(unsigned int mch_ID)
     }
 }
 
+void Environment::time_shift(unsigned int time)
+{
+    while (this->_events.front().get_time()<time)
+    {
+        time-=this->_events.front().get_time();
+        this->do_step(1);
+    }
+    for (auto n:this->_events)
+    {
+        n.time_shift(time);
+    }
+    this->_global_model_time+=time;
+
+    if (DEBUG) std::cout<<this->_global_model_time<<'\n';
+}
+
 
 
 
