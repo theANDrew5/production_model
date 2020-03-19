@@ -241,6 +241,14 @@ void Environment::add_batch(unsigned int btc_ID, unsigned int mch_ID, unsigned i
     mch->insert_batch(btc,pos);
 }
 
+void Environment::do_step_till_end()
+{
+    while (!this->_events.empty())
+    {
+        this->do_step(1);
+    }
+}
+
 
 
 

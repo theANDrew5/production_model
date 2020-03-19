@@ -16,7 +16,8 @@
 #include "Event.h"
 #include "Batch.h"
 #include "Machine.h"
-class Environment {
+class Environment
+{
 public:
     Environment();
     Environment(std::istream &is, std::ostream &os=std::cout,unsigned int time=0);
@@ -24,13 +25,15 @@ public:
     friend std::istream & operator>> (std::istream & is, Environment & p);//перегрузка оператора сдвига для потока ввода
     friend std::ostream & operator<< (std::ostream & os, Environment & p);//перегрузка оператора <<
 
-    //вставка события из машины
+    void time_shift(unsigned int time);//сдвинуть время модели
+    void do_step_till_end();//моделировать до коца
+    void do_step_till_machine(unsigned int mch_ID);//моделировать до машины ID
     void do_step(unsigned int n);//сделать n шагов моделирования
     void add_batch(unsigned int btc_ID, unsigned int mch_ID, unsigned int pos);//вставить в очередь машины партию
 
 private:
 
-    void push_event(Machine & mch);
+    void push_event(Machine & mch); //вставка события из машины
     void make_events();//рассчёт массива событий при запуске модели
     Batch* search_batch(unsigned int btc_ID);//возвращает указатель на партию по её ID
     Machine* search_machine(unsigned int mch_ID);//возвращает указатель на машину по её ID
