@@ -249,6 +249,15 @@ void Environment::do_step_till_end()
     }
 }
 
+void Environment::do_step_till_machine(unsigned int mch_ID)
+{
+    Machine *m_ptr=this->search_machine(mch_ID);
+    while (this->_events.front().get_ptr()!=m_ptr)
+    {
+        this->do_step(1);
+    }
+}
+
 
 
 
