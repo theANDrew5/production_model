@@ -20,9 +20,12 @@ class Environment
 {
 public:
     Environment();
-    Environment(std::istream &is, std::ostream &os=std::cout,unsigned int time=0);
+    Environment(std::istream &is_conf, unsigned int time=0, std::ostream &os_log=std::cout,
+                std::ostream &os_mes=std::cout);
+    Environment(std::istream &is_conf, std::istream &is_state,unsigned int time=0, std::ostream &os_log=std::cout,
+            std::ostream &os_mes=std::cout);
 
-    friend std::istream & operator>> (std::istream & is, Environment & p);//перегрузка оператора сдвига для потока ввода
+
     friend std::ostream & operator<< (std::ostream & os, Environment & p);//перегрузка оператора <<
 
     void time_shift(unsigned int time);//сдвинуть время модели
@@ -44,14 +47,19 @@ private:
     std::list <Machine*> _machines;//вектор машин
     std::deque <Event> _events;//вектор событий, по которому происходят шаги
     unsigned int _global_model_time;
-    std::istream * _is_state_file;//входной файл состояния, чтобы создать среду
-    //std::ostream _os_state_file;//выходной файл состояния, чтобы среду сохранить
+    std::istream * _config_file;//файл конфигурации в нём описаны имя среды и машины
+    std::istream * _is_state_file;//входной файл состояния внём описаны партии и очереди в машины
+    //std::ostream _os_state_file;//выходной файл состояния
     std::ostream * _log_file;//последовательность ивентов
+    std::ostream * _messages;//поток для вывода сообщений
 
-
-    friend void read_machines(std::istream & is, Machine &ptr_m, Environment &ptr_e);//чтение машин
+    friend std::istream & operator>> (std::istream & is, Environment & p);
+    //перегрузка оператора сдвига для чтения файла конфигурации
+    void read_recipes(std::istream &is, std::deque <Recipe> &container);//читаем последовательность рецептов
+    void read_state(std::istream &is);//читаем файл состояния
+    void read_queues(std::istream &is);
     void read_ev(std::istream & is);//чтение событий
-    Batch&  find_bt (std::string name);
+
 
 };
 

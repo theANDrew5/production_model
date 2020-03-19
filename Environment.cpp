@@ -6,33 +6,6 @@
 
 static const bool DEBUG=true;
 
-void read_machines(std::istream & is, Machine &ptr_m, Environment &ptr_e)
-{
-
-    is>>ptr_m._ID;
-    is>>ptr_m._state;
-    is>>ptr_m._time;
-    is.get();//потому что >> не читает /n и его захватывает getline
-    while (is.peek()!='\t')//читаем рецепты
-    {
-        Recipe buf;
-        is >> buf;
-        ptr_m._recipes.push_back(buf);
-    }
-    is.get();//потому что >> не читает /n
-    while (is.peek()!='\t')//читаем имена партий
-    {
-        unsigned int bt_ID;
-        is>>bt_ID;
-        std::_List_iterator<Batch> it_b=
-                std::find_if(ptr_e._batches.begin(), ptr_e._batches.end(),
-                        [bt_ID](Batch b){ return bt_ID==b.get_ID() ;});//
-        ptr_m._bathces.push_back(&*it_b);
-    }
-    is.get();//потому что >> не читает /n
-    //return is;
-}
-
 
 void Environment::read_ev(std::istream &is)
 {
@@ -46,9 +19,80 @@ void Environment::read_ev(std::istream &is)
     this->_events.emplace_back(**it_mch,time);
 }
 
-std::istream & operator>> (std::istream & is, Environment & p)
+
+void Environment::read_recipes(std::istream &is, std::deque <Recipe> &container)
 {
+    std::string buf_string="";
+    while (is.peek()!='\n')//читаем рецепты машины
+    {
+        int rcp_ID=0;
+        int rcp_time=0;
+        is>>buf_string;
+        is>>rcp_ID;
+        is>>buf_string;
+        is>>rcp_time;
+        container.emplace_back(rcp_ID,rcp_time);
+    }
+}
+
+void Environment::read_state(std::istream &is)
+{
+    std::string buf_string="";
+    if (is>>buf_string && buf_string!="BATCHES:")
+    {
+        *this->_messages<<"STATE FILE IS CORRUPTED!\n";
+        throw -1;
+    }
+    while (is>>buf_string && buf_string=="ID:")//читаем партии
+    {
+        int ID=0;
+        int count=0;
+        std::deque <Recipe> recipes{};
+        is>>ID;
+        is>>buf_string;
+        is>>count;
+        is>>buf_string;
+        if (buf_string!="RECIPES:")
+        {
+            *this->_messages<<"STATE FILE IS CORRUPTED!\n";
+            throw -1;
+        }
+        this->read_recipes(is,recipes);
+        this->_batches.emplace_back(ID,count,recipes);
+    }
+    is>>buf_string;
+    if (is>>buf_string && buf_string=="QUEUES:")
+    {
+        while (is>>buf_string && buf_string=="ID:")
+        {
+            unsigned int mch_ID=0;
+            is>>mch_ID;
+            Machine *mch_ptr=this->search_machine(mch_ID);
+            std::deque <Batch*> queue{};
+            while (is.peek()!='\n')
+            {
+                is>>buf_string;
+                unsigned int btc_ID=0;
+                is>>btc_ID;
+                Batch *btc_ptr=this->search_batch(btc_ID);
+                queue.push_back(btc_ptr);
+            }
+            mch_ptr->insert_batch(queue);
+        }
+    }
+}
+
+std::istream & operator>> (std::istream & is, Environment & p)//чтение из файла конфигурации
+{
+    std::string buf_string="";
+    is>>buf_string;
+    if (buf_string!="ENVIRONMENT:")
+    {
+        *p._messages<<"CONFIG FILE IS CORRUPTED!\n";
+        throw -1;
+    }
     is>>p._name;
+    /*
     is.get();//потому что >> не читает /n
     while (is.peek()!='\n')//читаем партии
     {
@@ -59,25 +103,48 @@ std::istream & operator>> (std::istream & is, Environment & p)
         Batch buf;
         buf_str>>buf;
         p._batches.push_back(buf);
-    }
-    is.get();//
-    while (is.peek()!='\n')//читаем машины
+    }*/
+    is>>buf_string;
+    if (buf_string!="MACHINES:")
     {
-        std::string buf_string;
+        *p._messages<<"CONFIG FILE IS CORRUPTED!\n";
+        throw(-1);
+    }
+    is.get();// \n
+    while (is>>buf_string && buf_string=="TYPE:")//читаем машины
+    {
         is>>buf_string;
         Machine *ptr;
-        std::deque<Recipe> recipes;
-        if (buf_string=="flow") ptr = new M_flow;//здесь вставить остальные условия
+        if (buf_string=="flow")
+        {
+            int ID=0;
+            bool state=1;
+            int time=0;
+            std::deque <Recipe> recipes{};
+            is>>buf_string;
+            is>>ID;
+            is>>buf_string;
+            is>>state;
+            is>>buf_string;
+            is>>time;
+            is>>buf_string;
+            if (buf_string!="RECIPES:")
+            {
+                *p._messages<<"CONFIG FILE IS CORRUPTED!\n";
+                return is;
+            }
+            p.read_recipes(is,recipes);
+            ptr = new M_flow(ID,recipes,state,time);//здесь вставить остальные условия
+        }
         p._machines.push_back(ptr);
-        read_machines(is,*ptr,p);
-        //
     }
+    /*
     is.get();//потому что >> не читает /n
     while (is.peek()!='\n')//читаем события
     {
         p.read_ev(is);
     }
-    p.make_events();
+    p.make_events();*/
     return is;
 }
 
@@ -101,10 +168,19 @@ Environment::Environment()
     _global_model_time=0;
 }
 
-Environment::Environment(std::istream &is, std::ostream &os,unsigned int time):
-                        _is_state_file(&is),_global_model_time(time),_log_file(&os)
+Environment::Environment(std::istream &is_conf, unsigned int time, std::ostream &os_log,
+                         std::ostream &os_mes):
+                        _config_file(&is_conf),_log_file(&os_log),_messages(&os_mes),_global_model_time(time)
 {
-    *_is_state_file>>*this;
+    *_config_file>>*this;
+}
+
+Environment::Environment(std::istream &is_conf, std::istream &is_state, unsigned int time, std::ostream &os_log,
+                         std::ostream &os_mes):_config_file(&is_conf),_is_state_file(&is_state)
+                         ,_log_file(&os_log),_messages(&os_mes),_global_model_time(time)
+{
+    *_config_file>>*this;
+    this->read_state(*_is_state_file);
 }
 
 Batch *Environment::search_batch(unsigned int btc_ID)
@@ -272,6 +348,17 @@ void Environment::time_shift(unsigned int time)
 
     if (DEBUG) std::cout<<this->_global_model_time<<'\n';
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 

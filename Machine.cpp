@@ -8,14 +8,14 @@
 //конструкторы и деструктор интерфейса
 Machine::Machine() {_last_resipe= Recipe ();}
 
-Machine::Machine(int ID,std::deque<Recipe> recipes, std::list<Batch*> batches, bool state, unsigned int time):
-_ID(ID),_recipes(recipes),_bathces(batches), _state(state),_time(time)
+Machine::Machine(int ID,std::deque<Recipe> recipes, bool state, unsigned int time, std::list<Batch*> batches):
+_ID(ID),_recipes(recipes),_batches(batches), _state(state),_time(time)
 {
     _last_resipe=Recipe ();
 }
 
 Machine::Machine(const Machine &p):
-_ID(p._ID), _bathces(p._bathces),_recipes(p._recipes), _state(p._state),_time(p._time)
+_ID(p._ID), _batches(p._batches),_recipes(p._recipes), _state(p._state),_time(p._time)
 {_last_resipe= Recipe ();}
 
 Machine::~Machine() = default;
@@ -27,8 +27,8 @@ M_flow::M_flow()
     _type="flow";
 }
 
-M_flow::M_flow(int ID,std::deque<Recipe> recipes, std::list<Batch*> batches, bool state):
-        Machine(ID,recipes, batches, state)
+M_flow::M_flow(int ID,std::deque<Recipe> recipes, bool state, unsigned int time,std::list<Batch*> batches):
+        Machine(ID,recipes, state,time, batches)
 {
     _type="flow";
 }
@@ -44,9 +44,9 @@ M_flow::~M_flow() = default;
 //Метод выполняет рассчёт события в очереди
 unsigned int M_flow::push_ev()
 {
-    if (!_bathces.empty())
+    if (!_batches.empty())
     {
-        Batch *it=_bathces.front();
+        Batch *it=_batches.front();
         Recipe &rcp = it->get_first();
         if(std::any_of(_recipes.begin(),_recipes.end(),[rcp](Recipe const r){return rcp==r;}))
         //проверка рецептов
@@ -66,7 +66,7 @@ unsigned int M_flow::push_ev()
 void M_flow::execute(std::ostream *log)//выполнение события
 {
 
-    Batch* bt_ptr=this->_bathces.front();
+    Batch* bt_ptr=this->_batches.front();
     if (this->_last_resipe!=bt_ptr->get_first())
     {
         *log<<"Change recipe\nMachine ID:\t"<< this->_ID<<"\ttime:\t"<< this->_time<<'\n';
@@ -75,7 +75,7 @@ void M_flow::execute(std::ostream *log)//выполнение события
     }
     *log<<"Execute batch\nMachine ID:\t"<< this->_ID<<"\tBatch ID:\t"<<bt_ptr->get_first().get_ID()<<'\t';
     bt_ptr->execute();
-    this->_bathces.pop_front();
+    this->_batches.pop_front();
 }
 
 unsigned int M_flow::get_ID()
@@ -86,13 +86,21 @@ unsigned int M_flow::get_ID()
 void M_flow::insert_batch(Batch* btc, unsigned int pos)
 {
     unsigned int n=0;
-    auto btc_pos=this->_bathces.begin();
-    while (n!=pos & !this->_bathces.empty())
+    auto btc_pos=this->_batches.begin();
+    while (n!=pos & !this->_batches.empty())
     {
         btc_pos++;
         n++;
     }
-    this->_bathces.insert(btc_pos,btc);
+    this->_batches.insert(btc_pos,btc);
+}
+
+void M_flow::insert_batch(std::deque<Batch*> &container, unsigned int pos)
+{
+    for (auto n:container)
+    {
+        this->insert_batch(n,pos++);
+    }
 }
 
 
@@ -107,8 +115,8 @@ M_group::M_group() :
 }
 
 
-M_group::M_group(int ID, std::deque<Recipe> recipes, std::list<Batch*> batches, bool state, unsigned int time) :
-	Machine(ID, recipes, batches, state, time)
+M_group::M_group(int ID, std::deque<Recipe> recipes, bool state, unsigned int time, std::list<Batch*> batches) :
+	Machine(ID, recipes, state, time, batches)
 {
 	_type = "Group";
 }
@@ -125,9 +133,9 @@ unsigned int M_group::push_ev()
 {	
 
 	//		Check if queue is empty
-	if (!this->_bathces.empty())
+	if (!this->_batches.empty())
 	{
-		Batch *firstBatchPtr = this->_bathces.front();
+		Batch *firstBatchPtr = this->_batches.front();
 		
 		Recipe &firstBatchRecipeRef = firstBatchPtr->get_first();
 
@@ -162,7 +170,7 @@ unsigned int M_group::get_ID()
 void M_group::execute()
 {
 	//		Check if the recipe need to be changed, and change it if requireed
-	Batch* btcPtr = this->_bathces.front();
+	Batch* btcPtr = this->_batches.front();
 	if (this->_last_resipe != btcPtr->get_first())
 	{
 		this->_last_resipe = btcPtr->get_first();
@@ -173,7 +181,7 @@ void M_group::execute()
 	int tmpCntr = 0;
 
 	//		Count the group of Batchs with the same recipe from queue, and call Batch.execute() for each of them 
-	for (std::list<Batch*>::iterator iter = this->_bathces.begin(); (*iter)->get_first() == this->_last_resipe; iter++)
+	for (std::list<Batch*>::iterator iter = this->_batches.begin(); (*iter)->get_first() == this->_last_resipe; iter++)
 	{
 		(*iter)->execute();
 		
@@ -184,7 +192,7 @@ void M_group::execute()
 	//		Drop n = tmpCntr Batches from queue
 	for (int i = 0; i < tmpCntr; i++)
 	{
-		this->_bathces.pop_front();
+		this->_batches.pop_front();
 	}
 }
 
@@ -201,12 +209,13 @@ std::ostream &operator<<(std::ostream & os, Machine &p)//перегрузка о
 {
     os<<"TYPE: "<<p._type;
     os<<"\tID: "<<p._ID;
-    os<<"\tSTATE:"<<p._state;
+    os<<"\tSTATE: "<<p._state;
+    os<<"\tTIME "<<p._time;
     os<<"\tRECIPES:";
     for(Recipe n:p._recipes) os<<'\t'<<n;
     os<<'\n';
     /*
-    for(Batch* n:p._bathces) os<<n->get_ID()<<' ';
+    for(Batch* n:p._batches) os<<n->get_ID()<<' ';
     os<<'\t';*/
     return os;
 }
