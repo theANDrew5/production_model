@@ -95,17 +95,22 @@ public:
 };
 
 
-/*
+
 //наследник обработки пачкой пластин
-class M_stack:Machine
+class M_stack: public Machine
 {
 public:
-    M_stack(std::string name,std::vector <Recipe> recipes, bool state);
-    M_stack(std::string name,std::vector <Batch> batches,std::vector <Recipe> recipes, bool state);
-    //M_stack(const M_stack & p);
+	M_stack();
+	M_stack(int ID, std::deque<Recipe> recipes, bool state = true, unsigned int time = 0, std::list<Batch*> batches = {});
+	M_stack(const M_stack & p);
 
-    void execution();
+	unsigned int push_ev();//метод возвращает время события
+	void execute(std::ostream *log);//метод выполняет событие
+	unsigned int get_ID();
+	void insert_batch(Batch* btc, unsigned int pos);
+	void insert_batch(std::deque <Batch*> &container, unsigned int pos = 0);
+	~M_stack();
 };
 
-*/
+
 #endif //MODEL_MACHINE_H

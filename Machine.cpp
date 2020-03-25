@@ -238,6 +238,98 @@ M_group::~M_group()
 }
 
 
+M_stack::M_stack():
+	Machine()
+{
+	this->_type = "stack";
+}
+
+
+M_stack::M_stack(int ID, std::deque<Recipe> recipes, bool state, unsigned int time, std::list<Batch*> batches) :
+	Machine(ID, recipes, state, time, batches)
+{
+	this->_type = "stack";
+}
+
+
+M_stack::M_stack(const M_stack &p):
+	Machine(p)
+{
+	this->_type = "stack";
+}
+
+
+unsigned int M_stack::push_ev()
+{
+	if (!_batches.empty())
+	{
+		Batch *it = _batches.front();
+		Recipe &rcp = it->get_first();
+		if (std::any_of(_recipes.begin(), _recipes.end(), [rcp](Recipe const r) {return rcp == r; }))
+			//проверка рецептов
+		{
+			return  ((this->_last_resipe == it->get_first()) ?
+				rcp.get_time()*(int(it->get_count() / 13) + 1) : rcp.get_time()*(int(it->get_count() / 13) + 1 ) + this->_time); //OK
+		}
+		else throw (it);//ошибка в очереди партия с неверным рецептом
+	}
+	else
+	{
+		Batch *ptr = nullptr;
+		throw (ptr); //очередь пуста
+	}
+}
+
+
+void M_stack::execute(std::ostream *log)
+{
+	Batch* bt_ptr = this->_batches.front();
+	if (this->_last_resipe != bt_ptr->get_first())
+	{
+		*log << "Change_recipe\tMachine_ID: " << this->_ID << "\ttime: " << this->_time << '\n';
+		_last_resipe = bt_ptr->get_first();
+		//вставить вывод в лог
+	}
+	*log << "Execute_batch\tMachine_ID: " << this->_ID << "\tBatch_ID: " << bt_ptr->get_ID();
+	bt_ptr->execute();
+	this->_batches.pop_front();
+}
+
+
+unsigned int M_stack::get_ID()
+{
+	return this->_ID;
+}
+
+void M_stack::insert_batch(Batch* btc, unsigned int pos)
+{
+	unsigned int n = 0;
+
+	auto btc_pos = this->_batches.begin();
+
+	while (n != pos && !this->_batches.empty())
+	{
+		btc_pos++;
+
+		n++;
+	}
+
+	this->_batches.insert(btc_pos, btc);
+}
+
+void M_stack::insert_batch(std::deque <Batch*> &container, unsigned int pos)
+{
+	for (auto n : container)
+	{
+		this->insert_batch(n, pos++);
+	}
+}
+
+
+M_stack::~M_stack()
+{
+
+}
 
 
 std::ostream &operator<<(std::ostream & os, Machine &p)//перегрузка оператора сдвига для вывода
