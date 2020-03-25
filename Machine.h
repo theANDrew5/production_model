@@ -82,10 +82,14 @@ public:
 	unsigned int push_ev();
 
 	//		execute an event on this machine
-	void execute();
+	void execute(std::ostream *log);
 	
 	//		return an ID of machine
 	unsigned int get_ID();
+
+	void insert_batch(Batch* btc, unsigned int pos);//вставляет партию в очередь
+
+	void insert_batch(std::deque <Batch*> &container, unsigned int pos = 0);
 
 	~M_group();
 };

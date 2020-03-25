@@ -87,6 +87,14 @@ void M_flow::insert_batch(Batch* btc, unsigned int pos)
 {
     unsigned int n=0;
     auto btc_pos=this->_batches.begin();
+
+	//=================================================================================================================
+	//===================================================================================================================
+	//		
+	//					ПРОВЕРЬ НА ОШИБКУ СВОЙ &
+	//
+	//====================================================================================================================
+	//======================================================================================================================
     while (n!=pos & !this->_batches.empty())
     {
         btc_pos++;
@@ -167,13 +175,14 @@ unsigned int M_group::get_ID()
 }
 
 
-void M_group::execute()
+void M_group::execute(std::ostream *log)
 {
 	//		Check if the recipe need to be changed, and change it if requireed
 	Batch* btcPtr = this->_batches.front();
 	if (this->_last_resipe != btcPtr->get_first())
 	{
 		this->_last_resipe = btcPtr->get_first();
+		*log << "Change_recipe\tMachine_ID: " << this->_ID << "\ttime: " << this->_time << '\n';
 
 	}
 
@@ -184,7 +193,9 @@ void M_group::execute()
 	for (std::list<Batch*>::iterator iter = this->_batches.begin(); (*iter)->get_first() == this->_last_resipe; iter++)
 	{
 		(*iter)->execute();
-		
+
+		*log << "Execute_batch\tMachine_ID: " << this->_ID << "\tBatch_ID: " << (*iter)->get_ID() << "\n";
+
 		tmpCntr++;
 
 	}	
@@ -196,6 +207,30 @@ void M_group::execute()
 	}
 }
 
+
+void M_group::insert_batch(Batch* btc, unsigned int pos)
+{
+	unsigned int n = 0;
+	
+	auto btc_pos = this->_batches.begin();
+
+	while (n != pos && !this->_batches.empty())
+	{
+		btc_pos++;
+	
+		n++;
+	}
+
+	this->_batches.insert(btc_pos, btc);
+}
+
+void M_group::insert_batch(std::deque <Batch*> &container, unsigned int pos)
+{
+	for (auto n : container)
+	{
+		this->insert_batch(n, pos++);
+	}
+}
 
 M_group::~M_group()
 {
