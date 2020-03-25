@@ -14,9 +14,7 @@
 #include "Batch.h"
 #include "Recipe.h"
 
-
-class Environment;//для функции read_machines
-
+class Environment;
 //Класс интерфейс
 
 class Machine
@@ -30,9 +28,12 @@ public:
     virtual unsigned int push_ev()=0;//метод возвращает время события
     virtual void execute(std::ostream *log) =0;//метод выполняет событие
     virtual unsigned int get_ID()=0;//возвращает ID машины
-    virtual void insert_batch(Batch* btc, unsigned int pos)=0;//вставляет партию в очередь
+    virtual void insert_batch(Batch* btc, unsigned int pos=0)=0;//вставляет партию в очередь
     virtual void insert_batch(std::deque <Batch*> &container, unsigned int pos=0)=0;
 
+    //методы для M_chambers
+    virtual void insert_batch(Batch* btc,unsigned int ID, unsigned int pos)=0;
+    virtual void insert_batch(std::deque <Batch*> &container,unsigned int ID , unsigned int pos)=0;
 protected:
     std::string _type;//тип обработки
     unsigned int _ID;//имя
@@ -42,7 +43,6 @@ protected:
     Recipe _last_resipe;//последний рецепт
     unsigned int _time;//время смены рецепта
 
-    friend void read_machines(std::istream & is, Machine &ptr_m, Environment &ptr_e);//вместо оператора >>
     friend std::ostream &operator<<(std::ostream & os, Machine & p);//перегрузка оператора <<
 };
 
@@ -57,9 +57,13 @@ public:
     unsigned int push_ev();//метод возвращает время события
     void execute(std::ostream *log);//метод выполняет событие
     unsigned int get_ID();
-    void insert_batch(Batch* btc, unsigned int pos);
-    virtual void insert_batch(std::deque <Batch*> &container, unsigned int pos=0);
+    void insert_batch(Batch* btc, unsigned int pos=0);
+    void insert_batch(std::deque <Batch*> &container, unsigned int pos=0);
     ~M_flow();
+
+private:
+    void insert_batch(Batch* btc,unsigned int ID, unsigned int pos){}
+    void insert_batch(std::deque <Batch*> &container,unsigned int ID , unsigned int pos){}
 };
 
 
@@ -90,6 +94,24 @@ public:
 	~M_group();
 };
 
+
+//наследник с камерами
+class M_chambers: public Machine
+{
+public:
+    M_chambers();
+    M_chambers(unsigned int ID, std::list <Machine*> chambers,bool state=true);
+
+    unsigned int push_ev();//метод возвращает время события
+    void execute(std::ostream *log);//метод выполняет событие
+    unsigned int get_ID();//возвращает ID машины
+    //void insert_batch(Batch* btc,unsigned int ID, unsigned int pos=0);
+    //void insert_batch(std::deque <Batch*> &container,unsigned int ID , unsigned int pos=0);
+
+private:
+    std::list<Machine*>_chambers;
+
+};
 
 /*
 //наследник обработки пачкой пластин
