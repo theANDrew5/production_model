@@ -75,7 +75,7 @@ public:
 	M_group();
 
 	//		Main constructor
-	M_group(int ID, std::deque<Recipe> recipes, bool state = true, unsigned int time = 0, std::list<Batch*> batches = {});
+	M_group(int ID, std::deque<Recipe> recipes, bool state = true, unsigned int time = 0, unsigned int count=10, std::list<Batch*> batches = {});
 
 	//		Copy constructor
 	M_group(const M_group &p);
@@ -94,6 +94,9 @@ public:
 	void insert_batch(std::deque <Batch*> &container, unsigned int pos = 0);
 
 	~M_group();
+
+private:
+    unsigned int _count;
 };
 
 

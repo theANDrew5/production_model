@@ -10,14 +10,11 @@ int main()
     std::ofstream log("LOG.txt");
     Environment ev(config,state,log);
     ev.do_step_till_end();
-    ev.add_batch({1,2,3,4,5,6},2);
-    ev.do_step_till_end();
-    ev.add_batch({1,2,3,4,5,6},3);
-    ev.do_step_till_end();
+
     //ev.add_batch(2,1,0);
     //ev.add_batch(1,1,0);
     //ev.add_batch(3,1,0);
-    std::cout<<ev<<'\n';
+    //std::cout<<ev<<'\n';
     //ev.make_events();
     //
     //ev.make_events();

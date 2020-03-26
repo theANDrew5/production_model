@@ -114,8 +114,8 @@ M_group::M_group() :
 }
 
 
-M_group::M_group(int ID, std::deque<Recipe> recipes, bool state, unsigned int time, std::list<Batch*> batches) :
-	Machine(ID, recipes, state, time, batches)
+M_group::M_group(int ID, std::deque<Recipe> recipes, bool state, unsigned int time, unsigned int count, std::list<Batch*> batches) :
+	Machine(ID, recipes, state, time, batches),_count(count)
 {
 	_type = "Group";
 }
@@ -125,6 +125,7 @@ M_group::M_group(const M_group &p) :
 	Machine(p)
 {
 	_type = p._type;
+	_count = p._count;
 }
 
 
@@ -183,7 +184,7 @@ void M_group::execute(std::ostream *log)
 	//		Count the group of Batchs with the same recipe from queue, and call Batch.execute() for each of them 
 	for (auto iter = this->_batches.begin(); iter!= this->_batches.end(); iter++)
 	{
-	    if ((*iter)->get_first() != this->_last_resipe) break;
+	    if ((*iter)->get_first() != this->_last_resipe || tmpCntr==this->_count) break;
 		(*iter)->execute();
 
 		*log << "Execute_batch\tMachine_ID: " << this->_ID << "\tBatch_ID: " << (*iter)->get_ID() << "\n";
