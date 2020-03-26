@@ -33,6 +33,8 @@ public:
     virtual void insert_batch(Batch* btc, unsigned int pos)=0;//вставляет партию в очередь
     virtual void insert_batch(std::deque <Batch*> &container, unsigned int pos=0)=0;
 
+    bool check_queue();
+
 protected:
     std::string _type;//тип обработки
     unsigned int _ID;//имя

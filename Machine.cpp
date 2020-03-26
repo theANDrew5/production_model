@@ -85,22 +85,13 @@ unsigned int M_flow::get_ID()
 
 void M_flow::insert_batch(Batch* btc, unsigned int pos)
 {
-    unsigned int n=0;
-    auto btc_pos=this->_batches.begin();
-
-	//=================================================================================================================
-	//===================================================================================================================
-	//		
-	//					ПРОВЕРЬ НА ОШИБКУ СВОЙ &
-	//
-	//====================================================================================================================
-	//======================================================================================================================
-    while (n!=pos & !this->_batches.empty())
-    {
+    unsigned int n = 0;
+    auto btc_pos = this->_batches.begin();
+    while (n != pos && !this->_batches.empty()) {
         btc_pos++;
         n++;
     }
-    this->_batches.insert(btc_pos,btc);
+    this->_batches.insert(btc_pos, btc);
 }
 
 void M_flow::insert_batch(std::deque<Batch*> &container, unsigned int pos)
@@ -303,6 +294,7 @@ unsigned int M_stack::get_ID()
 
 void M_stack::insert_batch(Batch* btc, unsigned int pos)
 {
+
 	unsigned int n = 0;
 
 	auto btc_pos = this->_batches.begin();
@@ -315,13 +307,14 @@ void M_stack::insert_batch(Batch* btc, unsigned int pos)
 	}
 
 	this->_batches.insert(btc_pos, btc);
+
 }
 
 void M_stack::insert_batch(std::deque <Batch*> &container, unsigned int pos)
 {
 	for (auto n : container)
 	{
-		this->insert_batch(n, pos++);
+        this->insert_batch(n, pos++);
 	}
 }
 
@@ -345,6 +338,11 @@ std::ostream &operator<<(std::ostream & os, Machine &p)//перегрузка о
     for(Batch* n:p._batches) os<<n->get_ID()<<' ';
     os<<'\t';*/
     return os;
+}
+
+bool Machine::check_queue()
+{
+    return (this->_batches.empty());
 }
 
 

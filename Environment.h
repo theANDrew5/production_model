@@ -32,7 +32,9 @@ public:
     void do_step_till_end();//моделировать до коца
     void do_step_till_machine(unsigned int mch_ID);//моделировать до машины ID
     void do_step(unsigned int n);//сделать n шагов моделирования
-    void add_batch(unsigned int btc_ID, unsigned int mch_ID, unsigned int pos);//вставить в очередь машины партию
+    void add_batch(unsigned int btc_ID, unsigned int mch_ID, unsigned int pos=0);//вставить в очередь машины партию
+    void add_batch(std::vector<unsigned int>btc_IDs, unsigned int mch_ID, unsigned int pos=0);
+    //вставить в очередь машины несколько партий
 
 private:
 
@@ -40,7 +42,6 @@ private:
     void make_events();//рассчёт массива событий при запуске модели
     Batch* search_batch(unsigned int btc_ID);//возвращает указатель на партию по её ID
     Machine* search_machine(unsigned int mch_ID);//возвращает указатель на машину по её ID
-
 
     std::string _name;//имя среды
     std::list <Batch> _batches;//партии

@@ -123,7 +123,49 @@ std::istream & operator>> (std::istream & is, Environment & p)//чтение и�
                 return is;
             }
             p.read_recipes(is,recipes);
-            ptr = new M_flow(ID,recipes,state,time);//здесь вставить остальные условия
+            ptr = new M_flow(ID,recipes,state,time);
+        }
+        else if (buf_string=="stack")
+        {
+            int ID=0;
+            bool state=1;
+            int time=0;
+            std::deque <Recipe> recipes{};
+            is>>buf_string;
+            is>>ID;
+            is>>buf_string;
+            is>>state;
+            is>>buf_string;
+            is>>time;
+            is>>buf_string;
+            if (buf_string!="RECIPES:")
+            {
+                *p._messages<<"CONFIG FILE IS CORRUPTED!\n";
+                return is;
+            }
+            p.read_recipes(is,recipes);
+            ptr = new M_stack(ID,recipes,state,time);
+        }
+        else if (buf_string=="group")
+        {
+            int ID=0;
+            bool state=1;
+            int time=0;
+            std::deque <Recipe> recipes{};
+            is>>buf_string;
+            is>>ID;
+            is>>buf_string;
+            is>>state;
+            is>>buf_string;
+            is>>time;
+            is>>buf_string;
+            if (buf_string!="RECIPES:")
+            {
+                *p._messages<<"CONFIG FILE IS CORRUPTED!\n";
+                return is;
+            }
+            p.read_recipes(is,recipes);
+            ptr = new M_group(ID,recipes,state,time);
         }
         p._machines.push_back(ptr);
     }
@@ -296,7 +338,23 @@ void Environment::add_batch(unsigned int btc_ID, unsigned int mch_ID, unsigned i
 {
     Batch* btc=search_batch(btc_ID);
     Machine* mch=search_machine(mch_ID);
-    mch->insert_batch(btc,pos);
+    bool push_event = mch->check_queue();
+    mch->insert_batch(btc, pos);
+    if (push_event) this->push_event(*mch);
+}
+
+void Environment::add_batch(std::vector<unsigned int> btc_IDs, unsigned int mch_ID, unsigned int pos)
+{
+    Machine* mch = this->search_machine(mch_ID);
+    bool push_event = mch->check_queue();
+    std::deque <Batch*> batches ={};
+    for (auto n:btc_IDs)
+    {
+        Batch* btc =this->search_batch(n);
+        batches.push_back(btc);
+    }
+    mch->insert_batch(batches,pos);
+    if (push_event) this->push_event(*mch);
 }
 
 void Environment::do_step_till_end()
@@ -331,6 +389,11 @@ void Environment::time_shift(unsigned int time)
 
     if (DEBUG) std::cout<<this->_global_model_time<<'\n';
 }
+
+
+
+
+
 
 
 
