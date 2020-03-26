@@ -181,8 +181,9 @@ void M_group::execute(std::ostream *log)
 	int tmpCntr = 0;
 
 	//		Count the group of Batchs with the same recipe from queue, and call Batch.execute() for each of them 
-	for (std::list<Batch*>::iterator iter = this->_batches.begin(); (*iter)->get_first() == this->_last_resipe; iter++)
+	for (auto iter = this->_batches.begin(); iter!= this->_batches.end(); iter++)
 	{
+	    if ((*iter)->get_first() != this->_last_resipe) break;
 		(*iter)->execute();
 
 		*log << "Execute_batch\tMachine_ID: " << this->_ID << "\tBatch_ID: " << (*iter)->get_ID() << "\n";
