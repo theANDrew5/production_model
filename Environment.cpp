@@ -130,6 +130,7 @@ std::istream & operator>> (std::istream & is, Environment & p)//чтение и�
             int ID=0;
             bool state=1;
             int time=0;
+            int count=0;
             std::deque <Recipe> recipes{};
             is>>buf_string;
             is>>ID;
@@ -138,13 +139,15 @@ std::istream & operator>> (std::istream & is, Environment & p)//чтение и�
             is>>buf_string;
             is>>time;
             is>>buf_string;
+            is>>count;
+            is>>buf_string;
             if (buf_string!="RECIPES:")
             {
                 *p._messages<<"CONFIG FILE IS CORRUPTED!\n";
                 return is;
             }
             p.read_recipes(is,recipes);
-            ptr = new M_stack(ID,recipes,state,time);
+            ptr = new M_stack(ID,recipes,state,time,count);
         }
         else if (buf_string=="group")
         {

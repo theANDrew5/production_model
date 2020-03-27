@@ -14,7 +14,7 @@ int main()
     //ev.add_batch(2,1,0);
     //ev.add_batch(1,1,0);
     //ev.add_batch(3,1,0);
-    //std::cout<<ev<<'\n';
+    std::cout<<ev<<'\n';
     //ev.make_events();
     //
     //ev.make_events();

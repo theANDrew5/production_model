@@ -106,7 +106,7 @@ class M_stack: public Machine
 {
 public:
 	M_stack();
-	M_stack(int ID, std::deque<Recipe> recipes, bool state = true, unsigned int time = 0, std::list<Batch*> batches = {});
+	M_stack(int ID, std::deque<Recipe> recipes, bool state = true, unsigned int time = 0, unsigned int count=13, std::list<Batch*> batches = {});
 	M_stack(const M_stack & p);
 
 	unsigned int push_ev();//метод возвращает время события
@@ -115,6 +115,9 @@ public:
 	void insert_batch(Batch* btc, unsigned int pos);
 	void insert_batch(std::deque <Batch*> &container, unsigned int pos = 0);
 	~M_stack();
+
+private:
+    unsigned int _count;
 };
 
 

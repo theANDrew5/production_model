@@ -238,15 +238,15 @@ M_stack::M_stack():
 }
 
 
-M_stack::M_stack(int ID, std::deque<Recipe> recipes, bool state, unsigned int time, std::list<Batch*> batches) :
-	Machine(ID, recipes, state, time, batches)
+M_stack::M_stack(int ID, std::deque<Recipe> recipes, bool state, unsigned int time, unsigned int count, std::list<Batch*> batches) :
+	Machine(ID, recipes, state, time, batches), _count(count)
 {
 	this->_type = "stack";
 }
 
 
 M_stack::M_stack(const M_stack &p):
-	Machine(p)
+	Machine(p), _count(p._count)
 {
 	this->_type = "stack";
 }
@@ -262,7 +262,8 @@ unsigned int M_stack::push_ev()
 			//проверка рецептов
 		{
 			return  ((this->_last_resipe == it->get_first()) ?
-				rcp.get_time()*(int(it->get_count() / 13) + 1) : rcp.get_time()*(int(it->get_count() / 13) + 1 ) + this->_time); //OK
+				rcp.get_time()*(int(it->get_count() / this->_count) + 1) :
+				rcp.get_time()*(int(it->get_count() / this->_count)+ 1 ) + this->_time); //OK
 		}
 		else throw (it);//ошибка в очереди партия с неверным рецептом
 	}
