@@ -353,16 +353,22 @@ void Environment::add_batch(unsigned int btc_ID, unsigned int mch_ID, unsigned i
     Batch* btc=search_batch(btc_ID);
     Machine* mch=search_machine(mch_ID);
     bool push_event = mch->check_queue();//проверка на пустую очередь
-    bool change_event=0;
-    if (push_event==0 && pos==0) change_event=1;//необходимо поменять event
     mch->insert_batch(btc, pos);
     if (push_event) this->push_event(*mch);
+    if(push_event==0 && pos==0)//необходимо поменять event
+    {
+        auto ev_it=this->search_event(mch);
+        this->_events.erase(ev_it);
+        this->push_event(*mch);
+    }
+    //выводим сообщение
+    *this->_messages<<"Batch added:\nBatch:\t"<<btc_ID<<"\tMachine:\t"<<mch_ID<<'\n';
 }
 
 void Environment::add_batch(std::vector<unsigned int> btc_IDs, unsigned int mch_ID, unsigned int pos)
 {
     Machine* mch = this->search_machine(mch_ID);
-    bool push_event = mch->check_queue();
+    bool push_event = mch->check_queue();//проверка на пустую очередь
     std::deque <Batch*> batches ={};
     for (auto n:btc_IDs)
     {
@@ -371,6 +377,17 @@ void Environment::add_batch(std::vector<unsigned int> btc_IDs, unsigned int mch_
     }
     mch->insert_batch(batches,pos);
     if (push_event) this->push_event(*mch);
+    if(push_event==0 && pos==0)//необходимо поменять event
+    {
+        auto ev_it=this->search_event(mch);
+        this->_events.erase(ev_it);
+        this->push_event(*mch);
+    }
+    //выводим сообщение
+    *this->_messages<<"Batches added:\nBatches:\t";
+    for (auto n:btc_IDs)
+        *this->_messages<<n<<' ';
+    *this->_messages<<"\tMachine:\t"<<mch_ID<<'\n';
 }
 
 void Environment::do_step_till_end()
