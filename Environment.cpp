@@ -390,13 +390,6 @@ void Environment::add_batch(std::vector<unsigned int> btc_IDs, unsigned int mch_
     *this->_messages<<"\tMachine:\t"<<mch_ID<<'\n';
 }
 
-void Environment::do_step_till_end()
-{
-    while (!this->_events.empty())
-    {
-        this->do_step(1);
-    }
-}
 
 void Environment::do_step_till_machine(unsigned int mch_ID)
 {

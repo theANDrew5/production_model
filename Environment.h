@@ -29,7 +29,6 @@ public:
     friend std::ostream & operator<< (std::ostream & os, Environment & p);//перегрузка оператора <<
 
     void time_shift(unsigned int time);//сдвинуть время модели
-    void do_step_till_end();//моделировать до коца
     void do_step_till_machine(unsigned int mch_ID);//моделировать до машины ID
     void do_step();//моделировать до коца
     void do_step(unsigned int n);//сделать n шагов моделирования
