@@ -32,7 +32,7 @@ public:
     void insert_batch(Batch* btc, unsigned int pos);//вставляет партию в очередь
     void insert_batch(std::deque <Batch*> &container, unsigned int pos=0);//вставляет несколько партий в очередь
     void replace_queue(std::deque <Batch*> &container);//заменяет очередь
-    bool check_queue();
+    bool check_queue();//проверяет на нулевую очередь
 
 protected:
     std::string _type;//тип обработки

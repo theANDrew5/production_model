@@ -236,6 +236,13 @@ Machine *Environment::search_machine(unsigned int mch_ID)
     return ptr;
 }
 
+std::deque<Event>::iterator Environment::search_event(Machine *ptr)
+{
+    auto it=this->_events.begin();
+    while (it->get_ptr()!=ptr) it++;
+    return it;
+}
+
 void Environment::change_event(Machine *mch)
 {
     auto ev_it=this->search_event(mch);
@@ -393,6 +400,26 @@ void Environment::add_batch(std::vector<unsigned int> btc_IDs, unsigned int mch_
     *this->_messages<<"\tMachine:\t"<<mch_ID<<'\n';
 }
 
+void Environment::replace_queue(std::vector<unsigned int> btc_IDs, unsigned int mch_ID)
+{
+    Machine* mch = this->search_machine(mch_ID);
+    bool push_event = mch->check_queue();//проверка на пустую очередь
+    std::deque <Batch*> batches ={};
+    for (auto n:btc_IDs)
+    {
+        Batch* btc =this->search_batch(n);
+        batches.push_back(btc);
+    }
+    mch->replace_queue(batches);
+    if (push_event) this->push_event(*mch);
+    else this->change_event(mch);
+    //выводим сообщение
+    *this->_messages<<"Queue replaced:\nBatches:\t";
+    for (auto n:btc_IDs)
+        *this->_messages<<n<<' ';
+    *this->_messages<<"\tMachine:\t"<<mch_ID<<'\n';
+}
+
 
 void Environment::do_step_till_machine(unsigned int mch_ID)
 {
@@ -419,12 +446,8 @@ void Environment::time_shift(unsigned int time)
     if (DEBUG) std::cout<<this->_global_model_time<<'\n';
 }
 
-std::deque<Event>::iterator Environment::search_event(Machine *ptr)
-{
-    auto it=this->_events.begin();
-    while (it->get_ptr()!=ptr) it++;
-    return it;
-}
+
+
 
 
 
