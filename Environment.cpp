@@ -236,6 +236,13 @@ Machine *Environment::search_machine(unsigned int mch_ID)
     return ptr;
 }
 
+void Environment::change_event(Machine *mch)
+{
+    auto ev_it=this->search_event(mch);
+    this->_events.erase(ev_it);
+    this->push_event(*mch);
+}
+
 void Environment::push_event(Machine &mch)
 {
     try
@@ -357,9 +364,7 @@ void Environment::add_batch(unsigned int btc_ID, unsigned int mch_ID, unsigned i
     if (push_event) this->push_event(*mch);
     if(push_event==0 && pos==0)//необходимо поменять event
     {
-        auto ev_it=this->search_event(mch);
-        this->_events.erase(ev_it);
-        this->push_event(*mch);
+        this->change_event(mch);
     }
     //выводим сообщение
     *this->_messages<<"Batch added:\nBatch:\t"<<btc_ID<<"\tMachine:\t"<<mch_ID<<'\n';
@@ -379,9 +384,7 @@ void Environment::add_batch(std::vector<unsigned int> btc_IDs, unsigned int mch_
     if (push_event) this->push_event(*mch);
     if(push_event==0 && pos==0)//необходимо поменять event
     {
-        auto ev_it=this->search_event(mch);
-        this->_events.erase(ev_it);
-        this->push_event(*mch);
+        this->change_event(mch);
     }
     //выводим сообщение
     *this->_messages<<"Batches added:\nBatches:\t";
@@ -422,6 +425,8 @@ std::deque<Event>::iterator Environment::search_event(Machine *ptr)
     while (it->get_ptr()!=ptr) it++;
     return it;
 }
+
+
 
 
 
