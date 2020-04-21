@@ -4,7 +4,7 @@
 
 #include "Environment.h"
 
-static const bool DEBUG=false;
+static const bool DEBUG=true;
 
 
 void Environment::read_ev(std::istream &is)
@@ -340,6 +340,14 @@ void Environment::do_step(unsigned int n)
     }
 }
 
+void Environment::do_step()
+{
+    while (!this->_events.empty())
+    {
+        this->do_step(1);
+    }
+}
+
 void Environment::add_batch(unsigned int btc_ID, unsigned int mch_ID, unsigned int pos)
 {
     Batch* btc=search_batch(btc_ID);
@@ -395,6 +403,8 @@ void Environment::time_shift(unsigned int time)
 
     if (DEBUG) std::cout<<this->_global_model_time<<'\n';
 }
+
+
 
 
 

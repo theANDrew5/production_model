@@ -9,7 +9,7 @@ int main()
     std::ifstream state ("StateFile.txt");
     std::ofstream log("LOG.txt");
     Environment ev(config,state,log);
-    ev.do_step_till_end();
+    ev.do_step();
 
     //ev.add_batch(2,1,0);
     //ev.add_batch(1,1,0);

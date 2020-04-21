@@ -15,8 +15,6 @@
 #include "Recipe.h"
 
 
-class Environment;//для функции read_machines
-
 //Класс интерфейс
 
 class Machine
@@ -39,12 +37,13 @@ protected:
     std::string _type;//тип обработки
     unsigned int _ID;//имя
     bool _state;//состояние
+    unsigned int _time;//время смены рецепта
     std::deque <Recipe> _recipes;//рецепты на машине
     std::list <Batch*> _batches;// входная очередь в виде ссылок на партии
     Recipe _last_resipe;//последний рецепт
-    unsigned int _time;//время смены рецепта
 
-    friend void read_machines(std::istream & is, Machine &ptr_m, Environment &ptr_e);//вместо оператора >>
+
+
     friend std::ostream &operator<<(std::ostream & os, Machine & p);//перегрузка оператора <<
 };
 
