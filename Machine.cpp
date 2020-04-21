@@ -5,7 +5,7 @@
 #include "Machine.h"
 #include <algorithm>
 
-//конструкторы и деструктор интерфейса
+//========================		Machine class methods	================================ класс интерфейс
 Machine::Machine() {_last_resipe= Recipe ();}
 
 Machine::Machine(int ID,std::deque<Recipe> recipes, bool state, unsigned int time, std::list<Batch*> batches):
@@ -20,8 +20,42 @@ _ID(p._ID), _batches(p._batches),_recipes(p._recipes), _state(p._state),_time(p.
 
 Machine::~Machine() = default;
 
+bool Machine::check_queue()
+{
+    return (this->_batches.empty());
+}
 
-//конструкторы и деструктор класса потоковой обработки
+void Machine::insert_batch(Batch* btc, unsigned int pos)
+{
+    unsigned int n = 0;
+    auto btc_pos = this->_batches.begin();
+    while (n!= pos && !this->_batches.empty())
+    {
+        btc_pos++;
+        n++;
+    }
+    this->_batches.insert(btc_pos, btc);
+}
+
+void Machine::insert_batch(std::deque<Batch*> &container, unsigned int pos)
+{
+    for (auto n:container)
+    {
+        this->insert_batch(n,pos++);
+    }
+}
+
+void Machine::replace_queue(std::deque<Batch *> &container)
+{
+    this->_batches.clear();
+    unsigned int pos=0;
+    for (auto n:container)
+    {
+        this->insert_batch(n,pos++);
+    }
+}
+
+//========================		M_flow class methods	================================ класс потоковой обработки
 M_flow::M_flow()
 {
     _type="flow";
@@ -82,27 +116,6 @@ unsigned int M_flow::get_ID()
 {
     return this->_ID;
 }
-
-void M_flow::insert_batch(Batch* btc, unsigned int pos)
-{
-    unsigned int n = 0;
-    auto btc_pos = this->_batches.begin();
-    while (n!= pos && !this->_batches.empty())
-    {
-        btc_pos++;
-        n++;
-    }
-    this->_batches.insert(btc_pos, btc);
-}
-
-void M_flow::insert_batch(std::deque<Batch*> &container, unsigned int pos)
-{
-    for (auto n:container)
-    {
-        this->insert_batch(n,pos++);
-    }
-}
-
 
 
 //========================		M_group class methods	================================
@@ -201,36 +214,13 @@ void M_group::execute(std::ostream *log)
 	}
 }
 
-
-void M_group::insert_batch(Batch* btc, unsigned int pos)
-{
-	unsigned int n = 0;
-	
-	auto btc_pos = this->_batches.begin();
-
-	while (n != pos && !this->_batches.empty())
-	{
-		btc_pos++;
-	
-		n++;
-	}
-
-	this->_batches.insert(btc_pos, btc);
-}
-
-void M_group::insert_batch(std::deque <Batch*> &container, unsigned int pos)
-{
-	for (auto n : container)
-	{
-		this->insert_batch(n, pos++);
-	}
-}
-
 M_group::~M_group()
 {
 
 }
 
+
+//========================		M_stack class methods	================================
 
 M_stack::M_stack():
 	Machine()
@@ -296,33 +286,6 @@ unsigned int M_stack::get_ID()
 	return this->_ID;
 }
 
-void M_stack::insert_batch(Batch* btc, unsigned int pos)
-{
-
-	unsigned int n = 0;
-
-	auto btc_pos = this->_batches.begin();
-
-	while (n != pos && !this->_batches.empty())
-	{
-		btc_pos++;
-
-		n++;
-	}
-
-	this->_batches.insert(btc_pos, btc);
-
-}
-
-void M_stack::insert_batch(std::deque <Batch*> &container, unsigned int pos)
-{
-	for (auto n : container)
-	{
-        this->insert_batch(n, pos++);
-	}
-}
-
-
 M_stack::~M_stack()
 {
 
@@ -344,10 +307,7 @@ std::ostream &operator<<(std::ostream & os, Machine &p)//перегрузка о
     return os;
 }
 
-bool Machine::check_queue()
-{
-    return (this->_batches.empty());
-}
+
 
 
 

@@ -28,9 +28,10 @@ public:
     virtual unsigned int push_ev()=0;//метод возвращает время события
     virtual void execute(std::ostream *log) =0;//метод выполняет событие
     virtual unsigned int get_ID()=0;//возвращает ID машины
-    virtual void insert_batch(Batch* btc, unsigned int pos)=0;//вставляет партию в очередь
-    virtual void insert_batch(std::deque <Batch*> &container, unsigned int pos=0)=0;
 
+    void insert_batch(Batch* btc, unsigned int pos);//вставляет партию в очередь
+    void insert_batch(std::deque <Batch*> &container, unsigned int pos=0);//вставляет несколько партий в очередь
+    void replace_queue(std::deque <Batch*> &container);//заменяет очередь
     bool check_queue();
 
 protected:
@@ -58,8 +59,6 @@ public:
     unsigned int push_ev();//метод возвращает время события
     void execute(std::ostream *log);//метод выполняет событие
     unsigned int get_ID();
-    void insert_batch(Batch* btc, unsigned int pos);
-    virtual void insert_batch(std::deque <Batch*> &container, unsigned int pos=0);
     ~M_flow();
 };
 
@@ -88,10 +87,6 @@ public:
 	//		return an ID of machine
 	unsigned int get_ID();
 
-	void insert_batch(Batch* btc, unsigned int pos);//вставляет партию в очередь
-
-	void insert_batch(std::deque <Batch*> &container, unsigned int pos = 0);
-
 	~M_group();
 
 private:
@@ -111,8 +106,7 @@ public:
 	unsigned int push_ev();//метод возвращает время события
 	void execute(std::ostream *log);//метод выполняет событие
 	unsigned int get_ID();
-	void insert_batch(Batch* btc, unsigned int pos);
-	void insert_batch(std::deque <Batch*> &container, unsigned int pos = 0);
+
 	~M_stack();
 
 private:
