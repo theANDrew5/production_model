@@ -352,7 +352,9 @@ void Environment::add_batch(unsigned int btc_ID, unsigned int mch_ID, unsigned i
 {
     Batch* btc=search_batch(btc_ID);
     Machine* mch=search_machine(mch_ID);
-    bool push_event = mch->check_queue();
+    bool push_event = mch->check_queue();//проверка на пустую очередь
+    bool change_event=0;
+    if (push_event==0 && pos==0) change_event=1;//необходимо поменять event
     mch->insert_batch(btc, pos);
     if (push_event) this->push_event(*mch);
 }
@@ -402,6 +404,13 @@ void Environment::time_shift(unsigned int time)
     this->_global_model_time+=time;
 
     if (DEBUG) std::cout<<this->_global_model_time<<'\n';
+}
+
+std::deque<Event>::iterator Environment::search_event(Machine *ptr)
+{
+    auto it=this->_events.begin();
+    while (it->get_ptr()!=ptr) it++;
+    return it;
 }
 
 

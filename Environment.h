@@ -43,6 +43,7 @@ private:
     void make_events();//рассчёт массива событий при запуске модели
     Batch* search_batch(unsigned int btc_ID);//возвращает указатель на партию по её ID
     Machine* search_machine(unsigned int mch_ID);//возвращает указатель на машину по её ID
+    std::deque<Event>::iterator search_event (Machine *ptr);//возвращает итератор на событие по указателю на машину
 
     std::string _name;//имя среды
     std::list <Batch> _batches;//партии
