@@ -20,22 +20,26 @@ _ID(p._ID), _batches(p._batches),_recipes(p._recipes), _state(p._state),_time(p.
 
 Machine::~Machine() = default;
 
+void Machine::addRecipe(Recipe newRecipe)
+{
+	this->_recipes.push_back(newRecipe);
+}
 
 //конструкторы и деструктор класса потоковой обработки
 M_flow::M_flow()
 {
-    _type="flow";
+	this->_type="flow";
 }
 
 M_flow::M_flow(int ID,std::deque<Recipe> recipes, bool state, unsigned int time,std::list<Batch*> batches):
         Machine(ID,recipes, state,time, batches)
 {
-    _type="flow";
+    this->_type="flow";
 }
 
 M_flow::M_flow(const M_flow &p):Machine(p)
 {
-    _type="flow";
+	this->_type="flow";
 }
 
 M_flow::~M_flow() = default;
