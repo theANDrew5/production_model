@@ -136,3 +136,26 @@ catch (const char *ex)
 }
 
 
+<<<<<<< HEAD
+=======
+    std::ifstream config ("ConfigFile.txt");
+    std::ifstream state ("StateFile.txt");
+    std::ofstream log("LOG.txt");
+    Environment ev(config,state,log);
+    //ev.do_step();
+    std::vector<unsigned int>IDs{5,6,7};
+    ev.replace_queue(IDs,3);
+    //ev.add_batch(1,1,0);
+    //ev.add_batch(3,1,0);
+    std::cout<<ev<<'\n';
+    //ev.make_events();
+    //
+    //ev.make_events();
+   // ev.do_step(2);
+    //std::cout<<ev;
+
+
+    return 0;
+
+}
+>>>>>>> b1ead0d283727d772de77b6a099414a3d51877f6

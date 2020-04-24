@@ -29,18 +29,22 @@ public:
     friend std::ostream & operator<< (std::ostream & os, Environment & p);//перегрузка оператора <<
 
     void time_shift(unsigned int time);//сдвинуть время модели
-    void do_step_till_end();//моделировать до коца
     void do_step_till_machine(unsigned int mch_ID);//моделировать до машины ID
+    void do_step();//моделировать до коца
     void do_step(unsigned int n);//сделать n шагов моделирования
-    void add_batch(unsigned int btc_ID, unsigned int mch_ID, unsigned int pos);//вставить в очередь машины партию
+    void add_batch(unsigned int btc_ID, unsigned int mch_ID, unsigned int pos=0);//вставить в очередь машины партию
+    void add_batch(std::vector<unsigned int>btc_IDs, unsigned int mch_ID, unsigned int pos=0);
+    //вставить в очередь машины несколько партий
+    void replace_queue(std::vector<unsigned int>btc_IDs, unsigned int mch_ID);//замена очереди
 
 private:
 
     void push_event(Machine & mch); //вставка события из машины
     void make_events();//рассчёт массива событий при запуске модели
+    void change_event(Machine *mch);//замена события
     Batch* search_batch(unsigned int btc_ID);//возвращает указатель на партию по её ID
     Machine* search_machine(unsigned int mch_ID);//возвращает указатель на машину по её ID
-
+    std::deque<Event>::iterator search_event (Machine *ptr);//возвращает итератор на событие по указателю на машину
 
     std::string _name;//имя среды
     std::list <Batch> _batches;//партии

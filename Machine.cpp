@@ -5,7 +5,7 @@
 #include "Machine.h"
 #include <algorithm>
 
-//конструкторы и деструктор интерфейса
+//========================		Machine class methods	================================ класс интерфейс
 Machine::Machine() {_last_resipe= Recipe ();}
 
 Machine::Machine(int ID,std::deque<Recipe> recipes, bool state, unsigned int time, std::list<Batch*> batches):
@@ -25,7 +25,43 @@ void Machine::addRecipe(Recipe newRecipe)
 	this->_recipes.push_back(newRecipe);
 }
 
-//конструкторы и деструктор класса потоковой обработки
+bool Machine::check_queue()
+{
+    return (this->_batches.empty());
+}
+
+void Machine::insert_batch(Batch* btc, unsigned int pos)
+{
+    unsigned int n = 0;
+    auto btc_pos = this->_batches.begin();
+    while (n!= pos && !this->_batches.empty())
+    {
+        btc_pos++;
+        n++;
+    }
+    this->_batches.insert(btc_pos, btc);
+
+}
+
+void Machine::insert_batch(std::deque<Batch*> &container, unsigned int pos)
+{
+    for (auto n:container)
+    {
+        this->insert_batch(n,pos++);
+    }
+}
+
+void Machine::replace_queue(std::deque<Batch *> &container)
+{
+    this->_batches.clear();
+    unsigned int pos=0;
+    for (auto n:container)
+    {
+        this->insert_batch(n,pos++);
+    }
+}
+
+//========================		M_flow class methods	================================ класс потоковой обработки
 M_flow::M_flow()
 {
 	this->_type="flow";
@@ -87,35 +123,6 @@ unsigned int M_flow::get_ID()
     return this->_ID;
 }
 
-void M_flow::insert_batch(Batch* btc, unsigned int pos)
-{
-    unsigned int n=0;
-    auto btc_pos=this->_batches.begin();
-
-	//=================================================================================================================
-	//===================================================================================================================
-	//		
-	//					ПРОВЕРЬ НА ОШИБКУ СВОЙ &
-	//
-	//====================================================================================================================
-	//======================================================================================================================
-    while (n!=pos & !this->_batches.empty())
-    {
-        btc_pos++;
-        n++;
-    }
-    this->_batches.insert(btc_pos,btc);
-}
-
-void M_flow::insert_batch(std::deque<Batch*> &container, unsigned int pos)
-{
-    for (auto n:container)
-    {
-        this->insert_batch(n,pos++);
-    }
-}
-
-
 
 //========================		M_group class methods	================================
 
@@ -127,8 +134,8 @@ M_group::M_group() :
 }
 
 
-M_group::M_group(int ID, std::deque<Recipe> recipes, bool state, unsigned int time, std::list<Batch*> batches) :
-	Machine(ID, recipes, state, time, batches)
+M_group::M_group(int ID, std::deque<Recipe> recipes, bool state, unsigned int time, unsigned int count, std::list<Batch*> batches) :
+	Machine(ID, recipes, state, time, batches),_count(count)
 {
 	_type = "Group";
 }
@@ -138,6 +145,7 @@ M_group::M_group(const M_group &p) :
 	Machine(p)
 {
 	_type = p._type;
+	_count = p._count;
 }
 
 
@@ -194,8 +202,9 @@ void M_group::execute(std::ostream *log)
 	int tmpCntr = 0;
 
 	//		Count the group of Batchs with the same recipe from queue, and call Batch.execute() for each of them 
-	for (std::list<Batch*>::iterator iter = this->_batches.begin(); (*iter)->get_first() == this->_last_resipe; iter++)
+	for (auto iter = this->_batches.begin(); iter!= this->_batches.end(); iter++)
 	{
+	    if ((*iter)->get_first() != this->_last_resipe || tmpCntr==this->_count) break;
 		(*iter)->execute();
 
 		*log << "Execute_batch\tMachine_ID: " << this->_ID << "\tBatch_ID: " << (*iter)->get_ID() << "\n";
@@ -211,36 +220,13 @@ void M_group::execute(std::ostream *log)
 	}
 }
 
-
-void M_group::insert_batch(Batch* btc, unsigned int pos)
-{
-	unsigned int n = 0;
-	
-	auto btc_pos = this->_batches.begin();
-
-	while (n != pos && !this->_batches.empty())
-	{
-		btc_pos++;
-	
-		n++;
-	}
-
-	this->_batches.insert(btc_pos, btc);
-}
-
-void M_group::insert_batch(std::deque <Batch*> &container, unsigned int pos)
-{
-	for (auto n : container)
-	{
-		this->insert_batch(n, pos++);
-	}
-}
-
 M_group::~M_group()
 {
 
 }
 
+
+//========================		M_stack class methods	================================
 
 M_stack::M_stack():
 	Machine()
@@ -249,15 +235,15 @@ M_stack::M_stack():
 }
 
 
-M_stack::M_stack(int ID, std::deque<Recipe> recipes, bool state, unsigned int time, std::list<Batch*> batches) :
-	Machine(ID, recipes, state, time, batches)
+M_stack::M_stack(int ID, std::deque<Recipe> recipes, bool state, unsigned int time, unsigned int count, std::list<Batch*> batches) :
+	Machine(ID, recipes, state, time, batches), _count(count)
 {
 	this->_type = "stack";
 }
 
 
 M_stack::M_stack(const M_stack &p):
-	Machine(p)
+	Machine(p), _count(p._count)
 {
 	this->_type = "stack";
 }
@@ -273,7 +259,8 @@ unsigned int M_stack::push_ev()
 			//проверка рецептов
 		{
 			return  ((this->_last_resipe == it->get_first()) ?
-				rcp.get_time()*(int(it->get_count() / 13) + 1) : rcp.get_time()*(int(it->get_count() / 13) + 1 ) + this->_time); //OK
+				rcp.get_time()*(int(it->get_count() / this->_count) + 1) :
+				rcp.get_time()*(int(it->get_count() / this->_count)+ 1 ) + this->_time); //OK
 		}
 		else throw (it);//ошибка в очереди партия с неверным рецептом
 	}
@@ -305,31 +292,6 @@ unsigned int M_stack::get_ID()
 	return this->_ID;
 }
 
-void M_stack::insert_batch(Batch* btc, unsigned int pos)
-{
-	unsigned int n = 0;
-
-	auto btc_pos = this->_batches.begin();
-
-	while (n != pos && !this->_batches.empty())
-	{
-		btc_pos++;
-
-		n++;
-	}
-
-	this->_batches.insert(btc_pos, btc);
-}
-
-void M_stack::insert_batch(std::deque <Batch*> &container, unsigned int pos)
-{
-	for (auto n : container)
-	{
-		this->insert_batch(n, pos++);
-	}
-}
-
-
 M_stack::~M_stack()
 {
 
@@ -350,6 +312,8 @@ std::ostream &operator<<(std::ostream & os, Machine &p)//перегрузка о
     os<<'\t';*/
     return os;
 }
+
+
 
 
 
