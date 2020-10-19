@@ -20,6 +20,11 @@ _ID(p._ID), _batches(p._batches),_recipes(p._recipes), _state(p._state),_time(p.
 
 Machine::~Machine() = default;
 
+unsigned int Machine::get_ID()
+{
+	return this->_ID;
+}
+
 void Machine::addRecipe(Recipe newRecipe)
 {
 	this->_recipes.push_back(newRecipe);
@@ -32,6 +37,10 @@ bool Machine::check_queue()
 
 void Machine::insert_batch(Batch* btc, unsigned int pos)
 {
+	if (pos == 0) //нельзя заменять нулевой элемент он уже в потоке событий!
+	{
+		throw(-1);
+	}
     unsigned int n = 0;
     auto btc_pos = this->_batches.begin();
     while (n!= pos && !this->_batches.empty())
@@ -45,6 +54,10 @@ void Machine::insert_batch(Batch* btc, unsigned int pos)
 
 void Machine::insert_batch(std::deque<Batch*> &container, unsigned int pos)
 {
+	if (pos == 0) //нельзя заменять нулевой элемент он уже в потоке событий!
+	{
+		throw(-1);
+	}
     for (auto n:container)
     {
         this->insert_batch(n,pos++);
@@ -53,7 +66,8 @@ void Machine::insert_batch(std::deque<Batch*> &container, unsigned int pos)
 
 void Machine::replace_queue(std::deque<Batch *> &container)
 {
-    this->_batches.clear();
+	//нельзя заменять нулевой элемент, он уже в потоке событий
+	this->_batches.erase(++_batches.begin(), this->_batches.end());
     unsigned int pos=0;
     for (auto n:container)
     {
@@ -118,10 +132,7 @@ void M_flow::execute(std::ostream *log)//выполнение события
     this->_batches.pop_front();
 }
 
-unsigned int M_flow::get_ID()
-{
-    return this->_ID;
-}
+
 
 
 //========================		M_group class methods	================================
@@ -181,10 +192,6 @@ unsigned int M_group::push_ev()
 	}
 }
 
-unsigned int M_group::get_ID()
-{
-	return this->_ID;
-}
 
 
 void M_group::execute(std::ostream *log)
@@ -287,10 +294,6 @@ void M_stack::execute(std::ostream *log)
 }
 
 
-unsigned int M_stack::get_ID()
-{
-	return this->_ID;
-}
 
 M_stack::~M_stack()
 {

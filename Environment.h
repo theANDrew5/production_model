@@ -35,7 +35,7 @@ public:
     void add_batch(unsigned int btc_ID, unsigned int mch_ID, unsigned int pos=0);//вставить в очередь машины партию
     void add_batch(std::vector<unsigned int>btc_IDs, unsigned int mch_ID, unsigned int pos=0);
     //вставить в очередь машины несколько партий
-    void replace_queue(std::vector<unsigned int>btc_IDs, unsigned int mch_ID);//замена очереди
+    void replace_queue(std::vector<unsigned int>btc_IDs, unsigned int mch_ID);//замена очереди, не заменяет нулевой элемент
 
 private:
 

@@ -27,13 +27,12 @@ public:
 
     virtual unsigned int push_ev()=0;//метод возвращает время события
     virtual void execute(std::ostream *log) =0;//метод выполняет событие
-    virtual unsigned int get_ID()=0;//возвращает ID машины
 
+    unsigned int get_ID();//возвращает ID машины
     void insert_batch(Batch* btc, unsigned int pos);//вставляет партию в очередь
     void insert_batch(std::deque <Batch*> &container, unsigned int pos=0);//вставляет несколько партий в очередь
     void replace_queue(std::deque <Batch*> &container);//заменяет очередь
     bool check_queue();//проверяет на нулевую очередь
-
 	void addRecipe(Recipe newRecipe);
 
 protected:
@@ -60,7 +59,6 @@ public:
 
     unsigned int push_ev();//метод возвращает время события
     void execute(std::ostream *log);//метод выполняет событие
-    unsigned int get_ID();
     ~M_flow();
 };
 
@@ -86,9 +84,6 @@ public:
 	//		execute an event on this machine
 	void execute(std::ostream *log);
 	
-	//		return an ID of machine
-	unsigned int get_ID();
-
 	~M_group();
 
 private:
@@ -107,7 +102,6 @@ public:
 
 	unsigned int push_ev();//метод возвращает время события
 	void execute(std::ostream *log);//метод выполняет событие
-	unsigned int get_ID();
 
 	~M_stack();
 

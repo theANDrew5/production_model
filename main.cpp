@@ -5,14 +5,16 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include "Environment.h"
+/*
 #include "production_model\Machine.h"
 #include "production_model\Batch.h"
 #include <list>
 #include <vector>
 #include <mysqlx\xdevapi.h>
 #include "production_model\Recipe.h"
-
-
+*/
+/*
 using ::std::cout;
 using ::std::endl;
 using namespace mysqlx;
@@ -138,6 +140,10 @@ catch (const char *ex)
 
 <<<<<<< HEAD
 =======
+
+*/
+int main()
+{
     std::ifstream config ("ConfigFile.txt");
     std::ifstream state ("StateFile.txt");
     std::ofstream log("LOG.txt");
@@ -148,14 +154,13 @@ catch (const char *ex)
     //ev.add_batch(1,1,0);
     //ev.add_batch(3,1,0);
     std::cout<<ev<<'\n';
-    //ev.make_events();
-    //
-    //ev.make_events();
-   // ev.do_step(2);
+	ev.add_batch(IDs, 3, 0);
+	ev.do_step(2);
+	
     //std::cout<<ev;
 
 
     return 0;
 
 }
->>>>>>> b1ead0d283727d772de77b6a099414a3d51877f6
+//>>>>>>> b1ead0d283727d772de77b6a099414a3d51877f6
