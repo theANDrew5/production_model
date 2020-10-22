@@ -5,8 +5,7 @@
 #ifndef MODEL_RECIPE_H
 #define MODEL_RECIPE_H
 
-#include <string>
-#include <iostream>
+#include "pch.h"// pch.h: This is a precompiled header file.
 
 
 class Recipe {

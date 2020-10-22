@@ -2,6 +2,7 @@
 // Created by User on 10-Feb-20.
 //
 
+#include "pch.h"// pch.h: This is a precompiled header file.
 #include "Event.h"
 
 Event::Event(Machine &m_ptr, unsigned int time):_m_ptr(&m_ptr), _time(time) {}

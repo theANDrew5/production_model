@@ -2,8 +2,9 @@
 // Created by User on 10-Feb-20.
 //
 //
+
+#include "pch.h"// pch.h: This is a precompiled header file.
 #include "Machine.h"
-#include <algorithm>
 
 //========================		Machine class methods	================================ класс интерфейс
 Machine::Machine() {_last_resipe= Recipe ();}

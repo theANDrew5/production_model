@@ -5,8 +5,7 @@
 #ifndef MODEL_EVENT_H
 #define MODEL_EVENT_H
 
-#include <iostream>
-#include <string>
+#include "pch.h"// pch.h: This is a precompiled header file.
 #include "Batch.h"
 #include "Machine.h"
 

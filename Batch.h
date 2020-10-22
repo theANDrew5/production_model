@@ -5,10 +5,7 @@
 #ifndef MODEL_BATCH_H
 #define MODEL_BATCH_H
 
-#include <string>
-#include <deque>
-#include <iostream>
-#include <algorithm>
+#include "pch.h"// pch.h: This is a precompiled header file.
 #include "Recipe.h"
 
 //класс партии

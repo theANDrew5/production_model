@@ -2,6 +2,7 @@
 // Created by User on 10-Feb-20.
 //
 
+#include "pch.h"// pch.h: This is a precompiled header file.
 #include "Environment.h"
 
 static const bool DEBUG=true;
@@ -198,8 +199,8 @@ Environment::Environment()
     _global_model_time=0;
 }
 
-Environment::Environment(std::istream &is_conf, unsigned int time, std::ostream &os_log,
-                         std::ostream &os_mes):
+Environment::Environment(std::istream &is_conf, std::ostream &os_log,
+                         std::ostream &os_mes, unsigned int time):
                         _config_file(&is_conf),_log_file(&os_log),_messages(&os_mes),_global_model_time(time)
 {
     *_config_file>>*this;
@@ -212,6 +213,10 @@ Environment::Environment(std::istream &is_conf, std::istream &is_state, std::ost
     *_config_file>>*this;
     this->read_state(*_is_state_file);
     this->make_events();
+}
+
+Environment::~Environment()
+{
 }
 
 Batch *Environment::search_batch(unsigned int btc_ID)

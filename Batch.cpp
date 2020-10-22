@@ -2,7 +2,9 @@
 // Created by User on 10-Feb-20.
 //
 
+#include "pch.h"// pch.h: This is a precompiled header file.
 #include "Batch.h"
+
 Batch::Batch(unsigned int ID,
         unsigned int count, std::deque<Recipe> recipes):_ID(ID),_count(count),_recipes(recipes) {}
 Batch::Batch(const Batch &p): _ID(p._ID), _count(p._count),_recipes(p._recipes) {}

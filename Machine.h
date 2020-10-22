@@ -5,12 +5,7 @@
 #ifndef MODEL_MACHINE_H
 #define MODEL_MACHINE_H
 
-#include <iostream>
-#include <string>
-#include <vector>
-#include <list>
-#include <sstream>
-#include <functional>
+#include "pch.h"// pch.h: This is a precompiled header file.
 #include "Batch.h"
 #include "Recipe.h"
 

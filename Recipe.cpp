@@ -2,6 +2,7 @@
 // Created by User on 10-Feb-20.
 //
 
+#include "pch.h"// pch.h: This is a precompiled header file.
 #include "Recipe.h"
 Recipe::Recipe(unsigned int ID, unsigned int time):_ID(ID),_time(time) {}
 Recipe::Recipe(const Recipe & p): _ID(p._ID), _time(p._time) {}
