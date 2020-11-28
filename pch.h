@@ -20,4 +20,6 @@
 #include <functional>
 #include <fstream>
 
+#define DEBUG true
+
 #endif //PCH_H

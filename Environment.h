@@ -10,12 +10,16 @@
 #include "Event.h"
 #include "Batch.h"
 #include "Machine.h"
-#include "Interface.h"
 
-class Environment: public Model
+
+
+//static const bool DEBUG = true;
+
+class Environment
 {
 public:
     Environment();
+    Environment(std::string& configfile, std::string& state_file, std::string& logfile, std::string& messages, unsigned int itial_time);
     Environment(std::istream &is_conf, std::ostream &os_log=std::cout,
                 std::ostream &os_mes=std::cout, unsigned int time = 0);
     Environment(std::istream &is_conf, std::istream &is_state, std::ostream &os_log=std::cout,
@@ -34,6 +38,10 @@ public:
     void add_batch(std::vector<unsigned int>btc_IDs, unsigned int mch_ID, unsigned int pos=0);
     //вставить в очередь машины несколько партий
     void replace_queue(std::vector<unsigned int>btc_IDs, unsigned int mch_ID);//замена очереди, не заменяет нулевой элемент
+
+    #if DEBUG
+        void print_env();
+    #endif // DEBUG
 
 private:
 
@@ -61,6 +69,11 @@ private:
     void read_state(std::istream &is);//читаем файл состояния
     void read_queues(std::istream &is);
     void read_ev(std::istream & is);//чтение событий
+
+#if DEBUG
+    void read_env(std::istream &is);
+#endif //  DEBUG
+
 
 
 };

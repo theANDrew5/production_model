@@ -6,7 +6,7 @@
 #include<vector>
 #include <pybind11/pybind11.h>
 
-
+/*
 class Model
 {
 public:
@@ -40,3 +40,4 @@ public:
     void replace_queue(std::vector<unsigned int>btc_IDs, unsigned int mch_ID) override;//замена очереди, не заменяет нулевой элемент
 
 };
+*/

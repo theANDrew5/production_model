@@ -5,9 +5,6 @@
 #include "pch.h"// pch.h: This is a precompiled header file.
 #include "Environment.h"
 
-static const bool DEBUG=true;
-
-
 void Environment::read_ev(std::istream &is)
 {
     unsigned int mch_ID;
@@ -18,6 +15,97 @@ void Environment::read_ev(std::istream &is)
     unsigned int time;
     is>>time;
     this->_events.emplace_back(**it_mch,time);
+}
+
+void Environment::read_env(std::istream& is)
+{
+    std::string buf_string = "";
+    is >> buf_string;
+    if (buf_string != "ENVIRONMENT:")
+    {
+        *this->_messages << "CONFIG FILE IS CORRUPTED!\n";
+        throw - 1;
+    }
+    is >> this->_name;
+    is >> buf_string;
+    if (buf_string != "MACHINES:")
+    {
+        *this->_messages << "CONFIG FILE IS CORRUPTED!\n";
+        throw(-1);
+    }
+    is.get();// \n
+    while (is >> buf_string && buf_string == "TYPE:")//читаем машины
+    {
+        is >> buf_string;
+        Machine* ptr;
+        if (buf_string == "flow")
+        {
+            int ID = 0;
+            bool state = 1;
+            int time = 0;
+            std::deque <Recipe> recipes{};
+            is >> buf_string;
+            is >> ID;
+            is >> buf_string;
+            is >> state;
+            is >> buf_string;
+            is >> time;
+            is >> buf_string;
+            if (buf_string != "RECIPES:")
+            {
+                *this->_messages << "CONFIG FILE IS CORRUPTED!\n";
+            }
+            this->read_recipes(is, recipes);
+            ptr = new M_flow(ID, recipes, state, time);
+        }
+        else if (buf_string == "stack")
+        {
+            int ID = 0;
+            bool state = 1;
+            int time = 0;
+            int count = 0;
+            std::deque <Recipe> recipes{};
+            is >> buf_string;
+            is >> ID;
+            is >> buf_string;
+            is >> state;
+            is >> buf_string;
+            is >> time;
+            is >> buf_string;
+            is >> count;
+            is >> buf_string;
+            if (buf_string != "RECIPES:")
+            {
+                *this->_messages << "CONFIG FILE IS CORRUPTED!\n";
+            }
+            this->read_recipes(is, recipes);
+            ptr = new M_stack(ID, recipes, state, time, count);
+        }
+        else if (buf_string == "group")
+        {
+            int ID = 0;
+            bool state = 1;
+            int time = 0;
+            int count = 0;
+            std::deque <Recipe> recipes{};
+            is >> buf_string;
+            is >> ID;
+            is >> buf_string;
+            is >> state;
+            is >> buf_string;
+            is >> time;
+            is >> buf_string;
+            is >> count;
+            is >> buf_string;
+            if (buf_string != "RECIPES:")
+            {
+                *this->_messages << "CONFIG FILE IS CORRUPTED!\n";
+            }
+            this->read_recipes(is, recipes);
+            ptr = new M_group(ID, recipes, state, time, count);
+        }
+        this->_machines.push_back(ptr);
+    }
 }
 
 
@@ -79,7 +167,7 @@ void Environment::read_state(std::istream &is)
                 Batch *btc_ptr=this->search_batch(btc_ID);
                 queue.push_back(btc_ptr);
             }
-            mch_ptr->insert_batch(queue);
+            mch_ptr->insert_batch(queue); //Строка пробрасывает искл
         }
     }
 }
@@ -199,8 +287,51 @@ Environment::Environment()
     _global_model_time=0;
 }
 
-Environment::Environment(std::istream &is_conf, std::ostream &os_log,
-                         std::ostream &os_mes, unsigned int time):
+Environment::Environment(std::string &configfile, std::string &state_file, std::string &logfile, std::string &messages, unsigned int itial_time)
+{
+    std::ifstream config(configfile, std::ios_base::in);
+
+    if (!config.is_open())
+    {
+        std::cout << "Config file not found";
+        //return;
+    }
+
+    std::ifstream state(state_file, std::ios_base::in);
+
+    if (state.rdstate() == std::ios_base::failbit)
+    {
+        std::cout << "State file not found";
+    }
+
+    if (!state.is_open())
+    {
+        std::cout << "State file not found";
+        //return;
+    }
+
+    std::ofstream log(logfile);
+
+
+    if (!log.is_open())
+    {
+        std::cout << "Log file not found";
+        //return;
+    }
+
+    //Environment(config, state, log, std::cout,0);
+    this->_config_file = &config;
+    this->_is_state_file = &state;
+    this->_log_file = &std::cout;
+    this->_messages = &std::cout;
+    this->_global_model_time = 0;
+
+    this->read_env(*_config_file);
+    this->read_state(*_is_state_file); //Строка пробрасывает искл
+    this->make_events();
+}
+
+Environment::Environment(std::istream &is_conf, std::ostream &os_log, std::ostream &os_mes, unsigned int time):
                         _config_file(&is_conf),_log_file(&os_log),_messages(&os_mes),_global_model_time(time)
 {
     *_config_file>>*this;
@@ -423,6 +554,34 @@ void Environment::replace_queue(std::vector<unsigned int> btc_IDs, unsigned int 
     for (auto n:btc_IDs)
         *this->_messages<<n<<' ';
     *this->_messages<<"\tMachine:\t"<<mch_ID<<'\n';
+}
+
+//отладочный метод для просмотра среды
+void Environment::print_env()
+{
+
+        std::cout<<"NAME:\t" << this->_name << '\n';
+        
+        std::cout << "EVENTS:\t";
+        for (auto n : this->_events)
+        {
+            std::cout << n << '\t';
+        }
+        std::cout << '\n';
+
+        std::cout << "MACHINES:\t";
+        for (auto n : this->_machines)
+        {
+            std::cout << n << '\t';
+        }
+        std::cout << '\n';
+
+        std::cout << "BATCHES:\t";
+        for (auto n : this->_batches)
+        {
+            std::cout << n << '\t';
+        }
+        std::cout << '\n';
 }
 
 
