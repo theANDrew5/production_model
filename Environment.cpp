@@ -310,7 +310,7 @@ Environment::Environment(std::string &configfile, std::string &state_file, std::
         //return;
     }
 
-    std::ofstream log(logfile);
+    std::ofstream log(logfile);//, std::ios::binary);
 
 
     if (!log.is_open())
@@ -319,10 +319,15 @@ Environment::Environment(std::string &configfile, std::string &state_file, std::
         //return;
     }
 
+    if (log.rdstate() == std::ios_base::failbit)
+    {
+        std::cout << "State file not found";
+    }
+
     //Environment(config, state, log, std::cout,0);
     this->_config_file = &config;
     this->_is_state_file = &state;
-    this->_log_file = &std::cout;
+    this->_log_file = &log;
     this->_messages = &std::cout;
     this->_global_model_time = 0;
 
